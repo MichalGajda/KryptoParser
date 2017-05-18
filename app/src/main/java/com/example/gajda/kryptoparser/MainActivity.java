@@ -2,24 +2,29 @@ package com.example.gajda.kryptoparser;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends ListActivity {
 
+    private String last_checked = "last_checked";
+    private String PSM_Project_log = "PSM_Project_log";
 
     private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
 
@@ -28,6 +33,7 @@ public class MainActivity extends ListActivity {
     private final static String SYMBOL = "symbol";
     private final static String RANK = "rank";
     private final static String PRICE = "price_usd";
+    private final static String PERCENT_CHANGE_24h = "percent_change_24h";
 
     private final static String VALUES = "values";
     private final static String X_AXIS = "x";
@@ -65,6 +71,11 @@ public class MainActivity extends ListActivity {
 
             Log.d("Odpowiedź: ", "> " + jsonString);
 
+            if (!jsonString.equals(""))
+                zapisz_do_pliku(jsonString);
+            else
+                jsonString = wczytaj_z_pliku();
+
             listaWalut = ParseJson(jsonString);
 
             return null;
@@ -80,8 +91,8 @@ public class MainActivity extends ListActivity {
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
-                    new String[]{NAME, RANK, PRICE}, new int[]{R.id.name,
-                    R.id.rank, R.id.price});
+                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h},
+                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h});
 
             setListAdapter(adapter);
         }
@@ -106,12 +117,14 @@ public class MainActivity extends ListActivity {
                     String name = jsonObject.getString(NAME);
                     String rank = jsonObject.getString(RANK);
                     String price = jsonObject.getString(PRICE);
+                    String price_change_24h = jsonObject.getString(PERCENT_CHANGE_24h);
 
                     HashMap<String, String> waluty = new HashMap<>();
 
                     waluty.put(NAME, name);
                     waluty.put(RANK, rank);
-                    waluty.put(PRICE, price);
+                    waluty.put(PRICE,"price per 1 unit:" + price);
+                    waluty.put(PERCENT_CHANGE_24h,"price_change_24h: " + price_change_24h + "%");
 
                     listaWalut.add(waluty);
                 }
@@ -126,6 +139,44 @@ public class MainActivity extends ListActivity {
         }
     }
 
+
+    public void zapisz_do_pliku (String raw_jason) {
+        Log.e(PSM_Project_log, "zapisz_do_pliku + raw_json: " + raw_jason);
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(last_checked, Context.MODE_PRIVATE);
+            fileOutputStream.write(raw_jason.getBytes());
+            fileOutputStream.close();
+            System.out.println("zapisano do pliku");
+            Log.e(PSM_Project_log,"zapisano do pliku");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String wczytaj_z_pliku () {
+        Log.e(PSM_Project_log, "wczytaj_z_pliku");
+        StringBuffer stringBuffer = new StringBuffer();
+        try {
+            FileInputStream fileInputStream = openFileInput(last_checked);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String message;
+            while ( ( message = bufferedReader.readLine()) != null ) {
+                stringBuffer.append(message + "\n");
+            }
+
+//            bufferedReader.close();
+//            inputStreamReader.close();
+//            fileInputStream.close();
+
+            System.out.println("Wczytano z pliku");
+            Log.e(PSM_Project_log,"Wczytano z pliku");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuffer.toString();
+    }
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
 

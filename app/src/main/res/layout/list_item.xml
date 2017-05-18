@@ -3,21 +3,37 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- name Label -->
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="name" />
-
+        android:paddingBottom="2dip"
+        android:paddingTop="6dip"
+        android:text="name"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+    <!-- rank label -->
     <TextView
         android:id="@+id/rank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="rank" />
-
+        android:text="rank"
+        android:gravity="center"/>
+    <!-- price_usd label -->
     <TextView
         android:id="@+id/price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="price_usd" />
+        android:text="price_usd"
+        android:gravity="center"/>
+    <!-- percent_change_24h label -->
+    <TextView
+        android:id="@+id/percent_change_24h"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="percent_change_24h: "
+        android:gravity="center"/>
+
 </LinearLayout>
