@@ -181,9 +181,11 @@ public class MainActivity extends ListActivity {
 
     public void pustaMetoda() {
 
-        String wierszyk = "";
 
-        Toast.makeText(this, "Odpowiem Ci wierszyk: " + wierszyk, Toast.LENGTH_SHORT).show();
+
+        String wierszyk = "czy wiesz, że hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
+
+        Toast.makeText(this, "Odpowiem Ci ciekawostkę: " + wierszyk, Toast.LENGTH_SHORT).show();
     }
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
