@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -176,6 +177,13 @@ public class MainActivity extends ListActivity {
             e.printStackTrace();
         }
         return stringBuffer.toString();
+    }
+
+    public void pustaMetoda() {
+
+        String wierszyk = "";
+
+        Toast.makeText(this, "Odpowiem Ci wierszyk: " + wierszyk, Toast.LENGTH_SHORT).show();
     }
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
