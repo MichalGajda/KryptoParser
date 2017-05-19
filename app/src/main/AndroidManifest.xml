@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Polaczenie"></activity>
+        <activity android:name=".Polaczenie" />
+        <activity android:name=".CalculatorActivity"></activity>
     </application>
 
 </manifest>

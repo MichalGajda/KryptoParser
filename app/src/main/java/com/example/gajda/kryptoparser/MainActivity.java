@@ -3,9 +3,14 @@ package com.example.gajda.kryptoparser;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -46,6 +51,27 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         new GetWaluty().execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =  getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.calculator:
+                Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.about:
+                Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public class GetWaluty extends AsyncTask<Void, Void, Void> {
@@ -180,12 +206,14 @@ public class MainActivity extends ListActivity {
     }
 
     public void pustaMetoda() {
-
-
-
         String wierszyk = "czy wiesz, że hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
-
         Toast.makeText(this, "Odpowiem Ci ciekawostkę: " + wierszyk, Toast.LENGTH_SHORT).show();
+    }
+
+    public void calculator(View view){
+
+        Intent intent = new Intent(this, CalculatorActivity.class);
+        startActivity(intent);
     }
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
