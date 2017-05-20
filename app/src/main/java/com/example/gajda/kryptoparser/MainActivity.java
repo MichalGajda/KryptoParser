@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 public class MainActivity extends ListActivity {
 
     private String last_checked = "last_checked";
-    private String PSM_Project_log = "PSM_Project_log";
+    public static String PSM_Project_log = "PSM_Project_log";
 
     private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
 
@@ -102,9 +103,9 @@ public class MainActivity extends ListActivity {
             Log.d("Odpowiedź: ", "> " + jsonString);
 
             if (!jsonString.equals(""))
-                zapisz_do_pliku(jsonString);
+                zapisz_do_pliku(jsonString, last_checked);
             else
-                jsonString = wczytaj_z_pliku();
+                jsonString = wczytaj_z_pliku(last_checked);
 
             listaWalut = ParseJson(jsonString);
 
@@ -115,9 +116,8 @@ public class MainActivity extends ListActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            if(progressDialog.isShowing()){
+            if(progressDialog.isShowing())
                 progressDialog.dismiss();
-            }
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
@@ -175,10 +175,10 @@ public class MainActivity extends ListActivity {
     }
 
 
-    public void zapisz_do_pliku (String raw_jason) {
+    public void zapisz_do_pliku (String raw_jason, String file_name) {
         Log.e(PSM_Project_log, "zapisz_do_pliku + raw_json: " + raw_jason);
         try {
-            FileOutputStream fileOutputStream = openFileOutput(last_checked, Context.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
             fileOutputStream.write(raw_jason.getBytes());
             fileOutputStream.close();
             System.out.println("zapisano do pliku");
@@ -188,11 +188,11 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public String wczytaj_z_pliku () {
+    public String wczytaj_z_pliku (String file_name) {
         Log.e(PSM_Project_log, "wczytaj_z_pliku");
         StringBuffer stringBuffer = new StringBuffer();
         try {
-            FileInputStream fileInputStream = openFileInput(last_checked);
+            FileInputStream fileInputStream = openFileInput(file_name);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -223,6 +223,11 @@ public class MainActivity extends ListActivity {
         Intent intent = new Intent(this, CalculatorActivity.class);
         startActivity(intent);
     }
+    public void go_to_walet (View view) {
+        Intent intent = new Intent(this, WaletView.class);
+        startActivity(intent);
+    }
+
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
 

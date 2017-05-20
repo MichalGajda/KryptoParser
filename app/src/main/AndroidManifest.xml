@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Polaczenie" />
-        <activity android:name=".CalculatorActivity"></activity>
+        <activity android:name=".CalculatorActivity" />
+        <activity android:name=".WaletView"></activity>
     </application>
 
 </manifest>
