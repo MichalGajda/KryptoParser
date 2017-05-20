@@ -39,6 +39,9 @@ public class MainActivity extends ListActivity {
     private final static String SYMBOL = "symbol";
     private final static String RANK = "rank";
     private final static String PRICE = "price_usd";
+    private final static String MARKET_CAP_USD = "market_cap_usd";
+    private final static String PERCENT_CHANGE_1h = "percent_change_1h";
+    private final static String PERCENT_CHANGE_7d = "percent_change_7d";
     private final static String PERCENT_CHANGE_24h = "percent_change_24h";
 
     private final static String VALUES = "values";
@@ -118,8 +121,8 @@ public class MainActivity extends ListActivity {
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
-                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h},
-                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h});
+                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h, PERCENT_CHANGE_1h, PERCENT_CHANGE_7d},
+                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h, R.id.percent_change_1h, R.id.percent_change_7d});
 
             setListAdapter(adapter);
         }
@@ -145,13 +148,18 @@ public class MainActivity extends ListActivity {
                     String rank = jsonObject.getString(RANK);
                     String price = jsonObject.getString(PRICE);
                     String price_change_24h = jsonObject.getString(PERCENT_CHANGE_24h);
+                    String price_change_1h = jsonObject.getString(PERCENT_CHANGE_1h);
+                    String price_change_7d = jsonObject.getString(PERCENT_CHANGE_7d);
 
                     HashMap<String, String> waluty = new HashMap<>();
 
                     waluty.put(NAME, name);
-                    waluty.put(RANK, rank);
-                    waluty.put(PRICE,"price per 1 unit:" + price);
-                    waluty.put(PERCENT_CHANGE_24h,"price_change_24h: " + price_change_24h + "%");
+                    waluty.put(RANK, "Rank: " + rank);
+                    waluty.put(PRICE,"Price per 1 unit: $" + price);
+                    waluty.put(PERCENT_CHANGE_24h,"24h: " + price_change_24h + "%");
+                    waluty.put(PERCENT_CHANGE_1h, "1h: "+ price_change_1h + "%");
+                    waluty.put(PERCENT_CHANGE_7d, "7d: "+ price_change_7d + "%");
+
 
                     listaWalut.add(waluty);
                 }
@@ -190,7 +198,7 @@ public class MainActivity extends ListActivity {
 
             String message;
             while ( ( message = bufferedReader.readLine()) != null ) {
-                stringBuffer.append(message + "\n");
+                stringBuffer.append(message);
             }
 
 //            bufferedReader.close();
