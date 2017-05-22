@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">KryptoParser</string>
+    <string name="list_view_name">Lista kryptowalut</string>
+    <string name="lowPrice">Low price:</string>
+    <string name="highPrice">High price:</string>
+    <string name="openPrice">Open price:</string>
+    <string name="closePrice">Close price:</string>
+    <string name="noCurrencyException">Sorry, no data about this currency</string>
+    <string name="calculator">Calculator</string>
+    <string name="about">About authors</string>
+    <string name="last_24h_period">Last 24h data:</string>
+    <string name="currencyName">name</string>
+    <string name="currencySymbol">symbol</string>
+    <string name="currencyPriceUSD">price_usd</string>
+    <string name="currency_change_in_time">Percent price change in:</string>
+    <string name="percent_change_1h">percent_change_1h:</string>
+    <string name="percent_change_24h">percent_change_24h:</string>
+    <string name="percent_change_7d">percent_change_7d:</string>
+    <string name="hp">High price:</string>
 </resources>

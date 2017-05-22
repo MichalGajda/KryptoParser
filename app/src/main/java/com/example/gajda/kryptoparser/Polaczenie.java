@@ -1,36 +1,21 @@
 package com.example.gajda.kryptoparser;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
+class Polaczenie {
 
-/*public class Polaczenie extends AppCompatActivity {
+    final static int GET = 1;
+    private final static int POST = 2;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_polaczenie);
-    }
-}*/
-
-public class Polaczenie {
-
-    public final static int GET = 1;
-    public final static int POST = 2;
-
-    public Polaczenie() {
+    Polaczenie() {
 
     }
 
-    public String nawiazPolaczenie(String urladdress, int requestMethod){
+    String nawiazPolaczenie(String urladdress, int requestMethod){
 
         URL url;
         String odpowiedz = "";
@@ -61,11 +46,6 @@ public class Polaczenie {
             } else {
                 odpowiedz = "";
             }
-
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

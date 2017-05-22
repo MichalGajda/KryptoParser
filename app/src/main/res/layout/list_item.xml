@@ -10,18 +10,18 @@
         android:layout_height="wrap_content"
         android:paddingBottom="2dip"
         android:paddingTop="6dip"
-        android:text="name"
+        android:text="@string/currencyName"
         android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"/>
     <!-- rank label -->
 
     <TextView
-        android:id="@+id/rank"
+        android:id="@+id/symbol"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="rank"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="@string/currencySymbol" />
 
     <TextView
         android:id="@+id/price"
@@ -29,14 +29,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="5dp"
-        android:text="price_usd"
+        android:text="@string/currencyPriceUSD"
         android:textAlignment="center" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Percent price change in: "
+        android:text="@string/currency_change_in_time"
         android:textAlignment="center" />
 
     <LinearLayout
@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
-            android:text="percent_change_1h: "
+            android:text="@string/percent_change_1h"
             android:textAlignment="center" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
-            android:text="percent_change_24h: "
+            android:text="@string/percent_change_24h"
             android:textAlignment="center" />
 
         <TextView
@@ -71,7 +71,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="5dp"
-            android:text="percent_change_7d: "
+            android:text="@string/percent_change_7d"
             android:textAlignment="center" />
 
     </LinearLayout>

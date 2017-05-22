@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class MainActivity extends ListActivity {
 
     private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
 
+
     private final static String ID = "id";
     private final static String NAME = "name";
     private final static String SYMBOL = "symbol";
@@ -44,6 +46,7 @@ public class MainActivity extends ListActivity {
     private final static String PERCENT_CHANGE_1h = "percent_change_1h";
     private final static String PERCENT_CHANGE_7d = "percent_change_7d";
     private final static String PERCENT_CHANGE_24h = "percent_change_24h";
+    public final static String CURRENCY_SIGN = "currency_sign";
 
     private final static String VALUES = "values";
     private final static String X_AXIS = "x";
@@ -55,6 +58,7 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         new GetWaluty().execute();
+        //listView = (ListView) findViewById(R.id.list)
     }
 
     @Override
@@ -69,6 +73,7 @@ public class MainActivity extends ListActivity {
         switch (item.getItemId()){
             case R.id.calculator:
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
+                calculator();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
@@ -78,7 +83,18 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public class GetWaluty extends AsyncTask<Void, Void, Void> {
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Intent intent = new Intent(this, CurrencyChartView.class);
+        TextView tv = (TextView) v.findViewById(R.id.symbol);
+        intent.putExtra(CURRENCY_SIGN, tv.getText().toString());
+        startActivity(intent);
+
+        //Toast.makeText(this, tv.getText().toString(), Toast.LENGTH_LONG).show();
+    }
+
+    private class GetWaluty extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog progressDialog;
         ArrayList<HashMap<String, String>> listaWalut;
@@ -107,7 +123,7 @@ public class MainActivity extends ListActivity {
             else
                 jsonString = wczytaj_z_pliku(last_checked);
 
-            listaWalut = ParseJson(jsonString);
+            listaWalut = parseJson(jsonString);
 
             return null;
         }
@@ -121,19 +137,19 @@ public class MainActivity extends ListActivity {
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
-                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h, PERCENT_CHANGE_1h, PERCENT_CHANGE_7d},
-                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h, R.id.percent_change_1h, R.id.percent_change_7d});
+                    new String[]{NAME, SYMBOL, PRICE, PERCENT_CHANGE_24h, PERCENT_CHANGE_1h, PERCENT_CHANGE_7d},
+                    new int[]{R.id.name, R.id.symbol, R.id.price, R.id.percent_change_24h, R.id.percent_change_1h, R.id.percent_change_7d});
 
             setListAdapter(adapter);
         }
 
     }
 
-    private ArrayList<HashMap<String, String>> ParseJson(String json) {
+    private ArrayList<HashMap<String, String>> parseJson(String json) {
         if(json != null) {
             try {
 
-                ArrayList<HashMap<String, String>> listaWalut = new ArrayList<HashMap<String, String>>();
+                ArrayList<HashMap<String, String>> listaWalut = new ArrayList<>();
 
                 //JSONObject jsonObject = new JSONObject(json);
                 JSONArray jsonArray = new JSONArray(json);
@@ -146,6 +162,7 @@ public class MainActivity extends ListActivity {
 
                     String name = jsonObject.getString(NAME);
                     String rank = jsonObject.getString(RANK);
+                    String symbol = jsonObject.getString(SYMBOL);
                     String price = jsonObject.getString(PRICE);
                     String price_change_24h = jsonObject.getString(PERCENT_CHANGE_24h);
                     String price_change_1h = jsonObject.getString(PERCENT_CHANGE_1h);
@@ -155,7 +172,8 @@ public class MainActivity extends ListActivity {
 
                     waluty.put(NAME, name);
                     waluty.put(RANK, "Rank: " + rank);
-                    waluty.put(PRICE,"Price per 1 unit: $" + price);
+                    waluty.put(SYMBOL, "" + symbol);
+                    waluty.put(PRICE, "Price per 1 unit: $" + price);
                     waluty.put(PERCENT_CHANGE_24h,"24h: " + price_change_24h + "%");
                     waluty.put(PERCENT_CHANGE_1h, "1h: "+ price_change_1h + "%");
                     waluty.put(PERCENT_CHANGE_7d, "7d: "+ price_change_7d + "%");
@@ -190,7 +208,7 @@ public class MainActivity extends ListActivity {
 
     public String wczytaj_z_pliku (String file_name) {
         Log.e(PSM_Project_log, "wczytaj_z_pliku");
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         try {
             FileInputStream fileInputStream = openFileInput(file_name);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
@@ -198,7 +216,7 @@ public class MainActivity extends ListActivity {
 
             String message;
             while ( ( message = bufferedReader.readLine()) != null ) {
-                stringBuffer.append(message);
+                stringBuilder.append(message);
             }
 
 //            bufferedReader.close();
@@ -210,59 +228,17 @@ public class MainActivity extends ListActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return stringBuffer.toString();
+        return stringBuilder.toString();
     }
 
-    public void pustaMetoda() {
-        String wierszyk = "czy wiesz, że hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
-        Toast.makeText(this, "Odpowiem Ci ciekawostkę: " + wierszyk, Toast.LENGTH_SHORT).show();
-    }
-
-    public void calculator(View view){
+    public void calculator(){
 
         Intent intent = new Intent(this, CalculatorActivity.class);
         startActivity(intent);
     }
+
     public void go_to_walet (View view) {
         Intent intent = new Intent(this, WaletView.class);
         startActivity(intent);
     }
-
-    /*
-    private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
-
-        ArrayList<HashMap<String, String>> coordinates = new ArrayList<>();
-
-        if(json != null){
-            try{
-                JSONObject jsonObject = new JSONObject(json);
-
-                JSONArray jsonArray = jsonObject.getJSONArray(VALUES);
-
-                HashMap<String, String> wartosci = new HashMap<>();
-
-                for(int i = 0; i < jsonArray.length(); i++){
-
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                    String x = jsonObject1.getString(X_AXIS);
-                    String y = jsonObject1.getString(Y_AXIS);
-
-                    wartosci.put(X_AXIS, x);
-                    wartosci.put(Y_AXIS, y);
-
-                }
-                return ;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
-        } else {
-            Log.e("ServiceHandler", "Nie można pobrać danych z podanego url");
-            return null;
-        }
-    }
-    */
-
-
 }

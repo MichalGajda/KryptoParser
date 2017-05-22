@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/calculator"
-        android:title="Calculator"
+    <item
+        android:id="@+id/calculator"
         android:icon="@drawable/calculator_icon32"
-        android:onClick="calculator"
-        app:showAsAction="always"></item>
-
+        android:title="@string/calculator"
+        android:showAsAction="ifRoom"/>
     <item android:id="@+id/about"
-        android:title="About"
+        android:title="@string/about"
         android:icon="@drawable/about_authors"
-        app:showAsAction="always"></item>
+        android:showAsAction="ifRoom"/>
 
 </menu>

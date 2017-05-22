@@ -22,7 +22,6 @@
         android:clickable="true"
         android:visibility="visible">
 
-
     </ListView>
 
 </LinearLayout>
