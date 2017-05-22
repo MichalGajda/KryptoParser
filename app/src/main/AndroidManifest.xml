@@ -18,7 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Polaczenie"></activity>
+        <activity android:name=".Polaczenie" />
+        <activity android:name=".CalculatorActivity" />
+        <activity android:name=".WaletView" />
+        <activity android:name=".WebWaletChart"
+            android:parentActivityName=".WaletView"></activity>
     </application>
 
 </manifest>

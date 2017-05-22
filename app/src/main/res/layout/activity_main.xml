@@ -8,16 +8,19 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/go_to_walet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Zapisz dane" />
+        android:onClick="go_to_walet"
+        android:text="go_to_walet" />
+
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true" >
+        android:clickable="true"
+        android:visibility="visible">
 
 
     </ListView>

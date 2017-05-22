@@ -3,11 +3,17 @@ package com.example.gajda.kryptoparser;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -25,7 +31,7 @@ import java.util.HashMap;
 public class MainActivity extends ListActivity {
 
     private String last_checked = "last_checked";
-    private String PSM_Project_log = "PSM_Project_log";
+    public static String PSM_Project_log = "PSM_Project_log";
 
     private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
 
@@ -34,6 +40,9 @@ public class MainActivity extends ListActivity {
     private final static String SYMBOL = "symbol";
     private final static String RANK = "rank";
     private final static String PRICE = "price_usd";
+    private final static String MARKET_CAP_USD = "market_cap_usd";
+    private final static String PERCENT_CHANGE_1h = "percent_change_1h";
+    private final static String PERCENT_CHANGE_7d = "percent_change_7d";
     private final static String PERCENT_CHANGE_24h = "percent_change_24h";
 
     private final static String VALUES = "values";
@@ -46,6 +55,27 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         new GetWaluty().execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =  getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.calculator:
+                Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.about:
+                Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public class GetWaluty extends AsyncTask<Void, Void, Void> {
@@ -73,9 +103,9 @@ public class MainActivity extends ListActivity {
             Log.d("Odpowiedź: ", "> " + jsonString);
 
             if (!jsonString.equals(""))
-                zapisz_do_pliku(jsonString);
+                zapisz_do_pliku(jsonString, last_checked);
             else
-                jsonString = wczytaj_z_pliku();
+                jsonString = wczytaj_z_pliku(last_checked);
 
             listaWalut = ParseJson(jsonString);
 
@@ -86,14 +116,13 @@ public class MainActivity extends ListActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            if(progressDialog.isShowing()){
+            if(progressDialog.isShowing())
                 progressDialog.dismiss();
-            }
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
-                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h},
-                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h});
+                    new String[]{NAME, RANK, PRICE, PERCENT_CHANGE_24h, PERCENT_CHANGE_1h, PERCENT_CHANGE_7d},
+                    new int[]{R.id.name, R.id.rank, R.id.price, R.id.percent_change_24h, R.id.percent_change_1h, R.id.percent_change_7d});
 
             setListAdapter(adapter);
         }
@@ -119,13 +148,18 @@ public class MainActivity extends ListActivity {
                     String rank = jsonObject.getString(RANK);
                     String price = jsonObject.getString(PRICE);
                     String price_change_24h = jsonObject.getString(PERCENT_CHANGE_24h);
+                    String price_change_1h = jsonObject.getString(PERCENT_CHANGE_1h);
+                    String price_change_7d = jsonObject.getString(PERCENT_CHANGE_7d);
 
                     HashMap<String, String> waluty = new HashMap<>();
 
                     waluty.put(NAME, name);
-                    waluty.put(RANK, rank);
-                    waluty.put(PRICE,"price per 1 unit:" + price);
-                    waluty.put(PERCENT_CHANGE_24h,"price_change_24h: " + price_change_24h + "%");
+                    waluty.put(RANK, "Rank: " + rank);
+                    waluty.put(PRICE,"Price per 1 unit: $" + price);
+                    waluty.put(PERCENT_CHANGE_24h,"24h: " + price_change_24h + "%");
+                    waluty.put(PERCENT_CHANGE_1h, "1h: "+ price_change_1h + "%");
+                    waluty.put(PERCENT_CHANGE_7d, "7d: "+ price_change_7d + "%");
+
 
                     listaWalut.add(waluty);
                 }
@@ -141,10 +175,10 @@ public class MainActivity extends ListActivity {
     }
 
 
-    public void zapisz_do_pliku (String raw_jason) {
+    public void zapisz_do_pliku (String raw_jason, String file_name) {
         Log.e(PSM_Project_log, "zapisz_do_pliku + raw_json: " + raw_jason);
         try {
-            FileOutputStream fileOutputStream = openFileOutput(last_checked, Context.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
             fileOutputStream.write(raw_jason.getBytes());
             fileOutputStream.close();
             System.out.println("zapisano do pliku");
@@ -154,17 +188,17 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public String wczytaj_z_pliku () {
+    public String wczytaj_z_pliku (String file_name) {
         Log.e(PSM_Project_log, "wczytaj_z_pliku");
         StringBuffer stringBuffer = new StringBuffer();
         try {
-            FileInputStream fileInputStream = openFileInput(last_checked);
+            FileInputStream fileInputStream = openFileInput(file_name);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             String message;
             while ( ( message = bufferedReader.readLine()) != null ) {
-                stringBuffer.append(message + "\n");
+                stringBuffer.append(message);
             }
 
 //            bufferedReader.close();
@@ -180,13 +214,20 @@ public class MainActivity extends ListActivity {
     }
 
     public void pustaMetoda() {
-
-
-
         String wierszyk = "czy wiesz, że hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh";
-
         Toast.makeText(this, "Odpowiem Ci ciekawostkę: " + wierszyk, Toast.LENGTH_SHORT).show();
     }
+
+    public void calculator(View view){
+
+        Intent intent = new Intent(this, CalculatorActivity.class);
+        startActivity(intent);
+    }
+    public void go_to_walet (View view) {
+        Intent intent = new Intent(this, WaletView.class);
+        startActivity(intent);
+    }
+
     /*
     private ArrayList<HashMap<String, String>> ParseToGrapth(String json){
 
