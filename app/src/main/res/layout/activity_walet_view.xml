@@ -21,6 +21,13 @@
         android:onClick="check_walet"
         android:text="check walet" />
 
+    <Button
+        android:id="@+id/show_history_as_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="show_history_as_chart"
+        android:text="show_history_as_chart" />
+
     <TextView
         android:id="@+id/final_balance"
         android:layout_width="match_parent"
@@ -50,11 +57,5 @@
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:text="total_sent: " />
-
-    <Button
-        android:id="@+id/show_history_as_chart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="show_history_as_chart" />
 
 </LinearLayout>

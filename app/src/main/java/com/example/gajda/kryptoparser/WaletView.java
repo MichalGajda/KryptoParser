@@ -1,11 +1,13 @@
 package com.example.gajda.kryptoparser;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +29,9 @@ public class WaletView extends AppCompatActivity {
 
     private String url_base = "https://blockchain.info/address/<PLACE_HOLDER>?format=json";
 
+    public static String URL_CHART = "com.example.gajda.kryptoparser.URL_CHART";
+    private String url_base_chart = "https://blockchain.info/charts/balance?address=<PLACE_HOLDER>";
+
     private final String NUMBER_OF_TRANSACTIONS = "n_tx";
     private final String TOTAL_RECIVED= "total_received";
     private final String TOTAL_SENT = "total_sent";
@@ -35,11 +40,33 @@ public class WaletView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(MainActivity.PSM_Project_log, "onCreate");
         setContentView(R.layout.activity_walet_view);
 
-        set_visibility(View.INVISIBLE);
-
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(MainActivity.PSM_Project_log, "onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(MainActivity.PSM_Project_log, "onResume");
+
+        EditText editText = (EditText) findViewById(R.id.address);
+        String address = editText.getText().toString();
+        if (address.equals("")) {
+            set_visibility(View.INVISIBLE);
+        } else {
+            String address_url = url_base.replace("<PLACE_HOLDER>", address);
+            set_visibility(View.VISIBLE);
+            new ReadURLTask().execute(address_url);
+        }
+    }
+
     public void check_walet (View view) {
         EditText editText = (EditText) findViewById(R.id.address);
         String address = editText.getText().toString();
@@ -62,7 +89,7 @@ public class WaletView extends AppCompatActivity {
             super.onPreExecute();
             Log.e(MainActivity.PSM_Project_log, "onPreExecute");
 
-            pd = ProgressDialog.show(WaletView.this, " api_coinmarketcap ", "Pobieram dane...");
+            pd = ProgressDialog.show(WaletView.this, " https://blockchain.info/api ", "Pobieram dane...");
         }
 
         @Override
@@ -70,9 +97,6 @@ public class WaletView extends AppCompatActivity {
             Log.e(MainActivity.PSM_Project_log, "doInBackground + urls: " + urls[0]);
 
             String response = "";
-
-            //Polaczenie polaczenie = new Polaczenie();
-            //response = polaczenie.nawiazPolaczenie(urls[0], Polaczenie.GET);
 
             try {
                 URL url = new URL(urls[0]);
@@ -109,7 +133,6 @@ public class WaletView extends AppCompatActivity {
     private void setTextVievs(String json) {
         if(json != null) {
             try {
-
                 JSONObject full_json = new JSONObject(json);
 
                 String total_recived = full_json.getString(TOTAL_RECIVED);
@@ -150,10 +173,20 @@ public class WaletView extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.total_received);
         textView.setVisibility(visibility);
 
-        Button button;
-        button = (Button) findViewById(R.id.show_history_as_chart);
-        button.setVisibility(visibility);
+//        Button button;
+//        button = (Button) findViewById(R.id.show_history_as_chart);
+//        button.setVisibility(visibility);
     }
-
-
+    protected void show_history_as_chart (View view) {
+        EditText editText = (EditText) findViewById(R.id.address);
+        String address = editText.getText().toString();
+        if (!address.equals("")) {
+            String address_url = url_base_chart.replace("<PLACE_HOLDER>", address);
+            Intent intent = new Intent(this, WebWaletChart.class);
+            intent.putExtra(URL_CHART, address_url);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "pole adresu nie moze byc puste", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
