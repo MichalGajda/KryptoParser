@@ -73,10 +73,19 @@ public class MainActivity extends ListActivity {
         switch (item.getItemId()){
             case R.id.calculator:
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
-                calculator();
+                Intent intent = new Intent(this, CalculatorActivity.class);
+                startActivity(intent);
+                //calculator();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, AboutAuthors.class);
+                startActivity(intent1);
+                return true;
+            case R.id.wallet:
+                Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(this, WaletView.class);
+                startActivity(intent2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -231,11 +240,12 @@ public class MainActivity extends ListActivity {
         return stringBuilder.toString();
     }
 
-    public void calculator(){
 
-        Intent intent = new Intent(this, CalculatorActivity.class);
-        startActivity(intent);
-    }
+//    public void calculator(){
+//
+//        Intent intent = new Intent(this, CalculatorActivity.class);
+//        startActivity(intent);
+//    }
 
     public void go_to_walet (View view) {
         Intent intent = new Intent(this, WaletView.class);

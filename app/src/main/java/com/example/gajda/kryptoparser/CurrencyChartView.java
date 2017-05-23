@@ -7,6 +7,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +63,37 @@ public class CurrencyChartView extends AppCompatActivity {
 
         candleStickChart = (CandleStickChart) findViewById(R.id.wykres);
         new GetData().execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =  getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.calculator:
+                Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, CalculatorActivity.class);
+                startActivity(intent);
+                //calculator();
+                return true;
+            case R.id.about:
+                Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, AboutAuthors.class);
+                startActivity(intent1);
+                return true;
+            case R.id.wallet:
+                Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(this, WaletView.class);
+                startActivity(intent2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class GetData extends AsyncTask<Void, Void, Void> {
