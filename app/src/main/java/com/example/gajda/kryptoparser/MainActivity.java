@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 public class MainActivity extends ListActivity {
 
-    private String last_checked = "last_checked";
+    private final String LIST_FILE_NAME = "LIST_FILE";
     public static String PSM_Project_log = "PSM_Project_log";
 
     private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
@@ -84,7 +84,7 @@ public class MainActivity extends ListActivity {
                 return true;
             case R.id.wallet:
                 Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
-                Intent intent2 = new Intent(this, WaletView.class);
+                Intent intent2 = new Intent(this, Wallet.class);
                 startActivity(intent2);
                 return true;
             default:
@@ -113,7 +113,7 @@ public class MainActivity extends ListActivity {
             super.onPreExecute();
 
             progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setMessage("Proszę czekać...");
+            progressDialog.setMessage("Please wait...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -125,14 +125,14 @@ public class MainActivity extends ListActivity {
 
             String jsonString = polaczenie.nawiazPolaczenie(url, Polaczenie.GET);
 
-            Log.d("Odpowiedź: ", "> " + jsonString);
+            Log.d("Response: ", "> " + jsonString);
 
             if (!jsonString.equals(""))
-                zapisz_do_pliku(jsonString, last_checked);
+                saveToFile(jsonString, LIST_FILE_NAME);
             else
-                jsonString = wczytaj_z_pliku(last_checked);
+                jsonString = loadFile(LIST_FILE_NAME);
 
-            listaWalut = parseJson(jsonString);
+            listaWalut = parseJson_coinmarketcap(jsonString);
 
             return null;
         }
@@ -154,11 +154,11 @@ public class MainActivity extends ListActivity {
 
     }
 
-    private ArrayList<HashMap<String, String>> parseJson(String json) {
+    private ArrayList<HashMap<String, String>> parseJson_coinmarketcap(String json) {
         if(json != null) {
             try {
 
-                ArrayList<HashMap<String, String>> listaWalut = new ArrayList<>();
+                ArrayList<HashMap<String, String>> currencyList = new ArrayList<>();
 
                 //JSONObject jsonObject = new JSONObject(json);
                 JSONArray jsonArray = new JSONArray(json);
@@ -187,36 +187,35 @@ public class MainActivity extends ListActivity {
                     waluty.put(PERCENT_CHANGE_1h, "1h: "+ price_change_1h + "%");
                     waluty.put(PERCENT_CHANGE_7d, "7d: "+ price_change_7d + "%");
 
-
-                    listaWalut.add(waluty);
+                    currencyList.add(waluty);
                 }
-                return listaWalut;
+                return currencyList;
             } catch (JSONException e) {
                 e.printStackTrace();
                 return null;
             }
         } else {
-            Log.e("ServiceHandler", "Nie można pobrać danych z podanego url");
+            Log.d("ServiceHandler", "Nie można pobrać danych z podanego url");
             return null;
         }
     }
 
 
-    public void zapisz_do_pliku (String raw_jason, String file_name) {
-        Log.e(PSM_Project_log, "zapisz_do_pliku + raw_json: " + raw_jason);
+    public void saveToFile(String raw_jason, String file_name) {
+        Log.d(PSM_Project_log, "save to file + raw_json: " + raw_jason);
         try {
             FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
             fileOutputStream.write(raw_jason.getBytes());
             fileOutputStream.close();
-            System.out.println("zapisano do pliku");
-            Log.e(PSM_Project_log,"zapisano do pliku");
+            System.out.println("file saved");
+            Log.d(PSM_Project_log,"file saved");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String wczytaj_z_pliku (String file_name) {
-        Log.e(PSM_Project_log, "wczytaj_z_pliku");
+    public String loadFile(String file_name) {
+        Log.d(PSM_Project_log, "loadFile");
         StringBuilder stringBuilder = new StringBuilder();
         try {
             FileInputStream fileInputStream = openFileInput(file_name);
@@ -228,12 +227,7 @@ public class MainActivity extends ListActivity {
                 stringBuilder.append(message);
             }
 
-//            bufferedReader.close();
-//            inputStreamReader.close();
-//            fileInputStream.close();
-
-            System.out.println("Wczytano z pliku");
-            Log.e(PSM_Project_log,"Wczytano z pliku");
+            Log.d(PSM_Project_log,"file loaded");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -247,8 +241,8 @@ public class MainActivity extends ListActivity {
 //        startActivity(intent);
 //    }
 
-    public void go_to_walet (View view) {
-        Intent intent = new Intent(this, WaletView.class);
+    public void goToWalet(View view) {
+        Intent intent = new Intent(this, Wallet.class);
         startActivity(intent);
     }
 }

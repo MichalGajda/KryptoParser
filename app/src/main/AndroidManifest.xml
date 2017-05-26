@@ -23,11 +23,11 @@
         <activity android:name=".CalculatorActivity"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".WaletView"
+            android:name=".Wallet"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".WebWaletChart"
-            android:parentActivityName=".WaletView" />
+            android:parentActivityName=".Wallet" />
         <activity
             android:name=".CurrencyChartView"
             android:parentActivityName=".MainActivity" />
