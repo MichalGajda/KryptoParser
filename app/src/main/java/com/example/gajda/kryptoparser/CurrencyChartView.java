@@ -52,7 +52,7 @@ public class CurrencyChartView extends AppCompatActivity {
 
         Intent intent = getIntent();
         long day = 86400;
-        long month = System.currentTimeMillis()/1000-30*day;
+        long month = System.currentTimeMillis()/1000-21*day;
         String currenySymbol = intent.getStringExtra(MainActivity.CURRENCY_SIGN);
         TextView tv = (TextView) findViewById(R.id.tvCurrency);
         tv.setText(currenySymbol);
@@ -88,7 +88,7 @@ public class CurrencyChartView extends AppCompatActivity {
                 return true;
             case R.id.wallet:
                 Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
-                Intent intent2 = new Intent(this, WaletView.class);
+                Intent intent2 = new Intent(this, Wallet.class);
                 startActivity(intent2);
                 return true;
             default:

@@ -1,6 +1,7 @@
 package com.example.gajda.kryptoparser;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,52 +20,56 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class WaletView extends AppCompatActivity {
+public class Wallet extends AppCompatActivity {
 
     private String url_base = "https://blockchain.info/address/<PLACE_HOLDER>?format=json";
 
-    public static String URL_CHART = "com.example.gajda.kryptoparser.URL_CHART";
-    private String url_base_chart = "https://blockchain.info/charts/balance?address=<PLACE_HOLDER>";
+    private final String WALLET_FILE_NAME = "WALLET_FILE";
 
-    private final String NUMBER_OF_TRANSACTIONS = "n_tx";
-    private final String TOTAL_RECIVED= "total_received";
-    private final String TOTAL_SENT = "total_sent";
-    private final String FINAL_BALANCE = "final_balance";
+    public static final String URL_CHART = "com.example.gajda.kryptoparser.URL_CHART";
+    private final String url_base_chart = "https://blockchain.info/charts/balance?address=<PLACE_HOLDER>";
+
+    private final String KEY_NUMBER_OF_TRANSACTIONS = "n_tx";
+    private final String KEY_TOTAL_RECEIVED = "total_received";
+    private final String KEY_TOTAL_SENT = "total_sent";
+    private final String KEY_FINAL_BALANCE = "final_balance";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(MainActivity.PSM_Project_log, "onCreate");
+        Log.d(MainActivity.PSM_Project_log, "onCreate");
         setContentView(R.layout.activity_wallet);
         Log.e(MainActivity.PSM_Project_log, "po setContentView");
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e(MainActivity.PSM_Project_log, "onStart");
+        Log.d(MainActivity.PSM_Project_log, "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(MainActivity.PSM_Project_log, "onResume");
+        Log.d(MainActivity.PSM_Project_log, "onResume");
 
         EditText editText = (EditText) findViewById(R.id.address);
         String address = editText.getText().toString();
-        if (address.equals("")) {
-            set_visibility(View.INVISIBLE);
+        if (address.isEmpty()) {
+            setVisibility(View.INVISIBLE);
         } else {
             String address_url = url_base.replace("<PLACE_HOLDER>", address);
-            set_visibility(View.VISIBLE);
+            setVisibility(View.VISIBLE);
             new ReadURLTask().execute(address_url);
         }
     }
@@ -91,7 +97,7 @@ public class WaletView extends AppCompatActivity {
                 return true;
             case R.id.wallet:
                 Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
-                Intent intent2 = new Intent(this, WaletView.class);
+                Intent intent2 = new Intent(this, Wallet.class);
                 startActivity(intent2);
                 return true;
             default:
@@ -99,21 +105,57 @@ public class WaletView extends AppCompatActivity {
         }
     }
 
-    public void check_walet (View view) {
+    public void checkWallet(View view) {
         EditText editText = (EditText) findViewById(R.id.address);
         String address = editText.getText().toString();
-        if (!address.equals("")) {
+        if (!address.isEmpty()) {
             String address_url = url_base.replace("<PLACE_HOLDER>", address);
-            set_visibility(View.VISIBLE);
+            setVisibility(View.VISIBLE);
             new ReadURLTask().execute(address_url);
         } else {
-            Toast.makeText(this, "pole adresu nie moze byc puste", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void saveCurrentAddress (View view) {
+        EditText editText = (EditText) findViewById(R.id.address);
+        String address = editText.getText().toString();
+        saveToFile(address, WALLET_FILE_NAME);
+    }
+    public void saveToFile(String toSave, String file_name) {
+        Log.d(MainActivity.PSM_Project_log, "save to file + raw_json: " + toSave);
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
+            fileOutputStream.write(toSave.getBytes());
+            fileOutputStream.close();
+            System.out.println("file saved");
+            Log.d(MainActivity.PSM_Project_log,"file saved");
+            Toast.makeText(Wallet.this, "address saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String loadFile(String file_name) {
+        Log.d(MainActivity.PSM_Project_log, "loadFile");
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            FileInputStream fileInputStream = openFileInput(file_name);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String message;
+            while ( ( message = bufferedReader.readLine()) != null ) {
+                stringBuilder.append(message);
+            }
+
+            Log.d(MainActivity.PSM_Project_log,"file loaded");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
     private class ReadURLTask extends AsyncTask<String, Void, String> {
 
-        // Hashmap for ListView
-        ArrayList<HashMap<String, String>> waletInfo;
         ProgressDialog pd;
 
         @Override
@@ -121,14 +163,18 @@ public class WaletView extends AppCompatActivity {
             super.onPreExecute();
             Log.e(MainActivity.PSM_Project_log, "onPreExecute");
 
-            pd = ProgressDialog.show(WaletView.this, " https://blockchain.info/api ", "Pobieram dane...");
+            pd = ProgressDialog.show(Wallet.this, " https://blockchain.info/api ", "Downloading data...");
         }
 
         @Override
         protected String doInBackground(String... urls) {
-            Log.e(MainActivity.PSM_Project_log, "doInBackground + urls: " + urls[0]);
+            Log.d(MainActivity.PSM_Project_log, "doInBackground + urls: " + urls[0]);
 
             String response = "";
+
+            // for wallet balance i don't need full web response, just first 7 lines so i created this limit
+            int lineLimit = 7;
+            int lineCounter = 0;
 
             try {
                 URL url = new URL(urls[0]);
@@ -139,27 +185,33 @@ public class WaletView extends AppCompatActivity {
                 InputStream is = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String linia;
-                while((linia = br.readLine()) !=  null ) {
+                while((linia = br.readLine()) !=  null && lineCounter != lineLimit) {
                     response += linia;
+                    ++lineCounter;
                 }
+                if (response.endsWith(",")) {
+                    response = response.substring(0,response.length()-1);
+                    response += "}";
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(response);
+            Log.d(MainActivity.PSM_Project_log, "response: " + response);
 
             return response;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.e(MainActivity.PSM_Project_log, "onPostExecute + s: " + s);
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            Log.d(MainActivity.PSM_Project_log, "onPostExecute + response: " + response);
 
-            System.out.println(s);
+            System.out.println(response);
 
             pd.dismiss();
 
-            setTextVievs(s);
+            setTextVievs(response);
         }
     }
     private void setTextVievs(String json) {
@@ -167,10 +219,10 @@ public class WaletView extends AppCompatActivity {
             try {
                 JSONObject full_json = new JSONObject(json);
 
-                String total_recived = full_json.getString(TOTAL_RECIVED);
-                String total_sent = full_json.getString(TOTAL_SENT);
-                String final_balance = full_json.getString(FINAL_BALANCE);
-                String number_of_transactions = full_json.getString(NUMBER_OF_TRANSACTIONS);
+                String total_recived = full_json.getString(KEY_TOTAL_RECEIVED);
+                String total_sent = full_json.getString(KEY_TOTAL_SENT);
+                String final_balance = full_json.getString(KEY_FINAL_BALANCE);
+                String number_of_transactions = full_json.getString(KEY_NUMBER_OF_TRANSACTIONS);
 
                 TextView textView = (TextView) findViewById(R.id.total_received);
                 textView.setText("total_recived: " + total_recived);
@@ -184,17 +236,17 @@ public class WaletView extends AppCompatActivity {
                 textView = (TextView) findViewById(R.id.number_of_transactions);
                 textView.setText("number_of_transactions: " + number_of_transactions);
 
-               // MainActivity.walet_text_views();
-
             } catch (JSONException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                Toast.makeText(Wallet.this, "Check if you typed correct address and try again", Toast.LENGTH_LONG).show();
+                setVisibility(View.INVISIBLE);
             }
         } else {
-            Log.e("ServiceHandler", "Nie można pobrać danych z podanego url");
+            Log.d("ServiceHandler", "Sorry, cannot download data from this url");
         }
     }
 
-    private void set_visibility(int visibility) {
+    private void setVisibility(int visibility) {
         TextView textView;
         textView = (TextView) findViewById(R.id.final_balance);
         textView.setVisibility(visibility);
@@ -205,20 +257,20 @@ public class WaletView extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.total_received);
         textView.setVisibility(visibility);
 
-//        Button button;
-//        button = (Button) findViewById(R.id.show_history_as_chart);
-//        button.setVisibility(visibility);
+        Button button;
+        button = (Button) findViewById(R.id.saveCurrentAddress);
+        button.setVisibility(visibility);
     }
-    protected void show_history_as_chart (View view) {
+    protected void showHistoryAsChart(View view) {
         EditText editText = (EditText) findViewById(R.id.address);
         String address = editText.getText().toString();
-        if (!address.equals("")) {
+        if (!address.isEmpty()) {
             String address_url = url_base_chart.replace("<PLACE_HOLDER>", address);
             Intent intent = new Intent(this, WebWaletChart.class);
             intent.putExtra(URL_CHART, address_url);
             startActivity(intent);
         } else {
-            Toast.makeText(this, "pole adresu nie moze byc puste", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
         }
     }
 }

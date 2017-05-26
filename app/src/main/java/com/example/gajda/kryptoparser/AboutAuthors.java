@@ -1,8 +1,8 @@
 package com.example.gajda.kryptoparser;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +38,7 @@ public class AboutAuthors extends AppCompatActivity {
                 return true;
             case R.id.wallet:
                 Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
-                Intent intent2 = new Intent(this, WaletView.class);
+                Intent intent2 = new Intent(this, Wallet.class);
                 startActivity(intent2);
                 return true;
             default:

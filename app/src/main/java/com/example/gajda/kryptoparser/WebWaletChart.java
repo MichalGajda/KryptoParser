@@ -21,7 +21,7 @@ public class WebWaletChart extends AppCompatActivity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         Intent intent = getIntent();
-        webView.loadUrl(intent.getStringExtra(WaletView.URL_CHART));
+        webView.loadUrl(intent.getStringExtra(Wallet.URL_CHART));
     }
 
     @Override

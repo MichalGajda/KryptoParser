@@ -13,14 +13,14 @@
         android:id="@+id/check_walet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="check_walet"
+        android:onClick="checkWallet"
         android:text="check walet" />
 
     <Button
         android:id="@+id/show_history_as_chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="show_history_as_chart"
+        android:onClick="showHistoryAsChart"
         android:text="show_history_as_chart" />
 
     <TextView
@@ -52,5 +52,25 @@
         android:layout_height="wrap_content"
         android:padding="3dp"
         android:text="total_sent: " />
+
+    <Button
+        android:id="@+id/saveCurrentAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="saveCurrentAddress"
+        android:text="save current address" />
+
+    <Button
+        android:id="@+id/loadOldAdresses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="loadOldAdresses"
+        android:text="load old adresses" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="TextView" />
 
 </LinearLayout>
