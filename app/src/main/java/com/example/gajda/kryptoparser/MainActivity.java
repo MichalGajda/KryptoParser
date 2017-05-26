@@ -34,8 +34,8 @@ public class MainActivity extends ListActivity {
     private final String LIST_FILE_NAME = "LIST_FILE";
     public static String PSM_Project_log = "PSM_Project_log";
 
-    private static String url = "https://api.coinmarketcap.com/v1/ticker/?limit=10";
-
+    private static final String basic_url = "https://api.coinmarketcap.com/v1/ticker/?limit=<LIMIT_HOLDER>";
+    private static final String LIMIT_HOLDER = "<LIMIT_HOLDER>";
 
     private final static String ID = "id";
     private final static String NAME = "name";
@@ -57,7 +57,7 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new GetWaluty().execute();
+        new GetCurrencies().execute();
         //listView = (ListView) findViewById(R.id.list)
     }
 
@@ -102,8 +102,11 @@ public class MainActivity extends ListActivity {
 
         //Toast.makeText(this, tv.getText().toString(), Toast.LENGTH_LONG).show();
     }
+    protected void changeListLimit (View view) {
+        //TODO
+    }
 
-    private class GetWaluty extends AsyncTask<Void, Void, Void> {
+    private class GetCurrencies extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog progressDialog;
         ArrayList<HashMap<String, String>> listaWalut;
@@ -123,7 +126,8 @@ public class MainActivity extends ListActivity {
 
             Polaczenie polaczenie = new Polaczenie();
 
-            String jsonString = polaczenie.nawiazPolaczenie(url, Polaczenie.GET);
+            String finalUrl = basic_url.replace(LIMIT_HOLDER, "25");
+            String jsonString = polaczenie.nawiazPolaczenie(finalUrl, Polaczenie.GET);
 
             Log.d("Response: ", "> " + jsonString);
 
@@ -195,7 +199,7 @@ public class MainActivity extends ListActivity {
                 return null;
             }
         } else {
-            Log.d("ServiceHandler", "Nie można pobrać danych z podanego url");
+            Log.d("ServiceHandler", "Nie można pobrać danych z podanego basic_url");
             return null;
         }
     }

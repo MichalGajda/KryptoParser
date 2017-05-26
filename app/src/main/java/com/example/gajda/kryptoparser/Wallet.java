@@ -32,6 +32,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class Wallet extends AppCompatActivity {
 
     private String url_base = "https://blockchain.info/address/<PLACE_HOLDER>?format=json";
+    private final String PLACE_HOLDER = "<PLACE_HOLDER>";
 
     private final String WALLET_FILE_NAME = "WALLET_FILE";
 
@@ -68,7 +69,7 @@ public class Wallet extends AppCompatActivity {
         if (address.isEmpty()) {
             setVisibility(View.INVISIBLE);
         } else {
-            String address_url = url_base.replace("<PLACE_HOLDER>", address);
+            String address_url = url_base.replace(PLACE_HOLDER, address);
             setVisibility(View.VISIBLE);
             new ReadURLTask().execute(address_url);
         }
@@ -109,7 +110,7 @@ public class Wallet extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.address);
         String address = editText.getText().toString();
         if (!address.isEmpty()) {
-            String address_url = url_base.replace("<PLACE_HOLDER>", address);
+            String address_url = url_base.replace(PLACE_HOLDER, address);
             setVisibility(View.VISIBLE);
             new ReadURLTask().execute(address_url);
         } else {
@@ -121,7 +122,7 @@ public class Wallet extends AppCompatActivity {
         String address = editText.getText().toString();
         saveToFile(address, WALLET_FILE_NAME);
     }
-    public void saveToFile(String toSave, String file_name) {
+    public void saveToFile (String toSave, String file_name) {
         Log.d(MainActivity.PSM_Project_log, "save to file + raw_json: " + toSave);
         try {
             FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
@@ -135,7 +136,7 @@ public class Wallet extends AppCompatActivity {
         }
     }
 
-    public String loadFile(String file_name) {
+    public String loadFile (String file_name) {
         Log.d(MainActivity.PSM_Project_log, "loadFile");
         StringBuilder stringBuilder = new StringBuilder();
         try {
@@ -153,6 +154,9 @@ public class Wallet extends AppCompatActivity {
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+    protected void loadOldAdresses (View view) {
+        //TODO
     }
     private class ReadURLTask extends AsyncTask<String, Void, String> {
 
@@ -224,14 +228,19 @@ public class Wallet extends AppCompatActivity {
                 String final_balance = full_json.getString(KEY_FINAL_BALANCE);
                 String number_of_transactions = full_json.getString(KEY_NUMBER_OF_TRANSACTIONS);
 
+                double satoshisToBTC;
+
                 TextView textView = (TextView) findViewById(R.id.total_received);
-                textView.setText("total_recived: " + total_recived);
+                satoshisToBTC = satoshisToBitcoin(total_recived);
+                textView.setText("total_recived: " + satoshisToBTC);
 
                 textView = (TextView) findViewById(R.id.total_sent);
-                textView.setText("total_sent: " + total_sent);
+                satoshisToBTC = satoshisToBitcoin(total_sent);
+                textView.setText("total_sent: " + satoshisToBTC);
 
                 textView = (TextView) findViewById(R.id.final_balance);
-                textView.setText("final_balance: " + final_balance + " Bitcoin Satoshi");
+                satoshisToBTC = satoshisToBitcoin(final_balance);
+                textView.setText("final_balance: " + satoshisToBTC + " Bitcoin");
 
                 textView = (TextView) findViewById(R.id.number_of_transactions);
                 textView.setText("number_of_transactions: " + number_of_transactions);
@@ -244,6 +253,9 @@ public class Wallet extends AppCompatActivity {
         } else {
             Log.d("ServiceHandler", "Sorry, cannot download data from this url");
         }
+    }
+    private double satoshisToBitcoin (String satoshis) {
+        return Double.parseDouble(satoshis) / Math.pow(10,8);
     }
 
     private void setVisibility(int visibility) {
@@ -259,6 +271,8 @@ public class Wallet extends AppCompatActivity {
 
         Button button;
         button = (Button) findViewById(R.id.saveCurrentAddress);
+        button.setVisibility(visibility);
+        button = (Button) findViewById(R.id.show_history_as_chart);
         button.setVisibility(visibility);
     }
     protected void showHistoryAsChart(View view) {

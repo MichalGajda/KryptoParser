@@ -7,11 +7,11 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/go_to_walet"
+        android:id="@+id/changeListLimit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="goToWalet"
-        android:text="go_to_walet" />
+        android:onClick="changeListLimit"
+        android:text="change list limit" />
 
     <ListView
         android:id="@android:id/list"
