@@ -131,10 +131,14 @@ public class MainActivity extends ListActivity {
 
             Log.d("Response: ", "> " + jsonString);
 
-            if (!jsonString.equals(""))
+            if (!jsonString.isEmpty()) {
                 saveToFile(jsonString, LIST_FILE_NAME);
-            else
+            } else {
                 jsonString = loadFile(LIST_FILE_NAME);
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "no internet connection, loading last downloadet data", Toast.LENGTH_LONG).show();
+            }
 
             listaWalut = parseJson_coinmarketcap(jsonString);
 

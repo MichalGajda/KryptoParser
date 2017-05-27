@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/address"
+        android:id="@+id/address_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="address in base58 format" />
@@ -16,49 +16,13 @@
         android:onClick="checkWallet"
         android:text="check walet" />
 
-    <Button
-        android:id="@+id/show_history_as_chart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="showHistoryAsChart"
-        android:text="show_history_as_chart" />
-
-    <TextView
-        android:id="@+id/final_balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="final_balance: "
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/number_of_transactions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:text="number_of_transactions: " />
-
-    <TextView
-        android:id="@+id/total_received"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:text="total_received: " />
-
-    <TextView
-        android:id="@+id/total_sent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:text="total_sent: " />
 
     <Button
-        android:id="@+id/saveCurrentAddress"
+        android:id="@+id/reset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="saveCurrentAddress"
-        android:text="save current address" />
+        android:onClick="reset"
+        android:text="reset saved" />
 
     <Button
         android:id="@+id/loadOldAdresses"
@@ -67,10 +31,14 @@
         android:onClick="loadOldAdresses"
         android:text="load old adresses" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <EditText
+        android:id="@+id/oldAdresses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TextView" />
+        android:ems="10"
+        android:hint="oldAdresses"
+        android:inputType="textMultiLine"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        />
 
 </LinearLayout>

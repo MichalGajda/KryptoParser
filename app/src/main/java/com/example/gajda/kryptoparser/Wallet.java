@@ -43,13 +43,16 @@ public class Wallet extends AppCompatActivity {
     private final String KEY_TOTAL_RECEIVED = "total_received";
     private final String KEY_TOTAL_SENT = "total_sent";
     private final String KEY_FINAL_BALANCE = "final_balance";
+    private final String KEY_ADDRESS = "address";
+
+    private String address_input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(MainActivity.PSM_Project_log, "onCreate");
         setContentView(R.layout.activity_wallet);
-        Log.e(MainActivity.PSM_Project_log, "po setContentView");
+        Log.d(MainActivity.PSM_Project_log, "po setContentView");
 
     }
 
@@ -63,15 +66,10 @@ public class Wallet extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(MainActivity.PSM_Project_log, "onResume");
-
-        EditText editText = (EditText) findViewById(R.id.address);
-        String address = editText.getText().toString();
-        if (address.isEmpty()) {
-            setVisibility(View.INVISIBLE);
-        } else {
-            String address_url = url_base.replace(PLACE_HOLDER, address);
-            setVisibility(View.VISIBLE);
+        if (!address_input.isEmpty()) {
+            String address_url = url_base.replace(PLACE_HOLDER, address_input);
             new ReadURLTask().execute(address_url);
+            setContentView(R.layout.display_wallet);
         }
     }
 
@@ -105,32 +103,52 @@ public class Wallet extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    protected void checkOtherAdress (View view) {
+        setContentView(R.layout.activity_wallet);
+    }
 
     public void checkWallet(View view) {
-        EditText editText = (EditText) findViewById(R.id.address);
-        String address = editText.getText().toString();
-        if (!address.isEmpty()) {
-            String address_url = url_base.replace(PLACE_HOLDER, address);
-            setVisibility(View.VISIBLE);
+        EditText editText = (EditText) findViewById(R.id.address_input);
+        String tmpAddress = editText.getText().toString();
+        if (!tmpAddress.isEmpty()) {
+            address_input = tmpAddress;
+            String address_url = url_base.replace(PLACE_HOLDER, address_input);
             new ReadURLTask().execute(address_url);
+            setContentView(R.layout.display_wallet);
         } else {
             Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
         }
     }
-    public void saveCurrentAddress (View view) {
-        EditText editText = (EditText) findViewById(R.id.address);
-        String address = editText.getText().toString();
-        saveToFile(address, WALLET_FILE_NAME);
+    protected void saveCurrentAddress () {
+        saveToFile(address_input, WALLET_FILE_NAME);
+    }
+    protected void reset (View view) {
+        Log.d(MainActivity.PSM_Project_log, "reset");
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(WALLET_FILE_NAME, Context.MODE_PRIVATE);
+            fileOutputStream.write(("").getBytes());
+            fileOutputStream.close();
+            Log.d(MainActivity.PSM_Project_log,"reset done");
+            Toast.makeText(Wallet.this, "reset done", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        EditText editText = (EditText) findViewById(R.id.oldAdresses);
+        editText.setText("");
     }
     public void saveToFile (String toSave, String file_name) {
         Log.d(MainActivity.PSM_Project_log, "save to file + raw_json: " + toSave);
         try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
-            fileOutputStream.write(toSave.getBytes());
-            fileOutputStream.close();
-            System.out.println("file saved");
-            Log.d(MainActivity.PSM_Project_log,"file saved");
-            Toast.makeText(Wallet.this, "address saved", Toast.LENGTH_SHORT).show();
+            String alreadySaved = loadFile(WALLET_FILE_NAME);
+            if (!alreadySaved.contains(toSave)) {
+                FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
+                fileOutputStream.write((alreadySaved + "\n" + toSave).getBytes());
+                fileOutputStream.close();
+                Log.d(MainActivity.PSM_Project_log,"file saved");
+                Toast.makeText(Wallet.this, "address saved", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(Wallet.this, "address already saved", Toast.LENGTH_SHORT).show();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,7 +174,9 @@ public class Wallet extends AppCompatActivity {
         return stringBuilder.toString();
     }
     protected void loadOldAdresses (View view) {
-        //TODO
+        EditText editText = (EditText) findViewById(R.id.oldAdresses);
+        String loadedFile = loadFile(WALLET_FILE_NAME);
+        editText.setText(loadedFile);
     }
     private class ReadURLTask extends AsyncTask<String, Void, String> {
 
@@ -177,7 +197,7 @@ public class Wallet extends AppCompatActivity {
             String response = "";
 
             // for wallet balance i don't need full web response, just first 7 lines so i created this limit
-            int lineLimit = 7;
+            final int lineLimit = 7;
             int lineCounter = 0;
 
             try {
@@ -211,8 +231,6 @@ public class Wallet extends AppCompatActivity {
             super.onPostExecute(response);
             Log.d(MainActivity.PSM_Project_log, "onPostExecute + response: " + response);
 
-            System.out.println(response);
-
             pd.dismiss();
 
             setTextVievs(response);
@@ -227,6 +245,7 @@ public class Wallet extends AppCompatActivity {
                 String total_sent = full_json.getString(KEY_TOTAL_SENT);
                 String final_balance = full_json.getString(KEY_FINAL_BALANCE);
                 String number_of_transactions = full_json.getString(KEY_NUMBER_OF_TRANSACTIONS);
+                String addres_view = full_json.getString(KEY_ADDRESS);
 
                 double satoshisToBTC;
 
@@ -245,10 +264,13 @@ public class Wallet extends AppCompatActivity {
                 textView = (TextView) findViewById(R.id.number_of_transactions);
                 textView.setText("number_of_transactions: " + number_of_transactions);
 
+                textView = (TextView) findViewById(R.id.address_view);
+                textView.setText("address: " + addres_view);
+
             } catch (JSONException e) {
                 //e.printStackTrace();
                 Toast.makeText(Wallet.this, "Check if you typed correct address and try again", Toast.LENGTH_LONG).show();
-                setVisibility(View.INVISIBLE);
+                setContentView(R.layout.activity_wallet);
             }
         } else {
             Log.d("ServiceHandler", "Sorry, cannot download data from this url");
@@ -258,7 +280,7 @@ public class Wallet extends AppCompatActivity {
         return Double.parseDouble(satoshis) / Math.pow(10,8);
     }
 
-    private void setVisibility(int visibility) {
+    protected void setVisibility(int visibility) {
         TextView textView;
         textView = (TextView) findViewById(R.id.final_balance);
         textView.setVisibility(visibility);
@@ -276,10 +298,8 @@ public class Wallet extends AppCompatActivity {
         button.setVisibility(visibility);
     }
     protected void showHistoryAsChart(View view) {
-        EditText editText = (EditText) findViewById(R.id.address);
-        String address = editText.getText().toString();
-        if (!address.isEmpty()) {
-            String address_url = url_base_chart.replace("<PLACE_HOLDER>", address);
+        if (!address_input.isEmpty()) {
+            String address_url = url_base_chart.replace("<PLACE_HOLDER>", address_input);
             Intent intent = new Intent(this, WebWaletChart.class);
             intent.putExtra(URL_CHART, address_url);
             startActivity(intent);
