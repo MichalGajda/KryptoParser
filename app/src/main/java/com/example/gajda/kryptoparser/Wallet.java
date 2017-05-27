@@ -45,7 +45,7 @@ public class Wallet extends AppCompatActivity {
     private final String KEY_FINAL_BALANCE = "final_balance";
     private final String KEY_ADDRESS = "address";
 
-    private String address_input = "";
+    private static String address_input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +119,7 @@ public class Wallet extends AppCompatActivity {
             Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
         }
     }
-    protected void saveCurrentAddress () {
+    protected void saveCurrentAddress (View view) {
         saveToFile(address_input, WALLET_FILE_NAME);
     }
     protected void reset (View view) {
