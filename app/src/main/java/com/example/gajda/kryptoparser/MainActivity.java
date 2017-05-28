@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +48,9 @@ public class MainActivity extends ListActivity {
     private final static String PERCENT_CHANGE_7d = "percent_change_7d";
     private final static String PERCENT_CHANGE_24h = "percent_change_24h";
     public final static String CURRENCY_SIGN = "currency_sign";
+
+    public static final String LIST_PREFFERENCES = "com.example.gajda.kryptoparser.LIST_PREFERENCES";
+    public static final String KEY_PREFERENCES_LIST_LIMIT = "com.example.gajda.kryptoparser.LIST_LIMIT";
 
     private final static String VALUES = "values";
     private final static String X_AXIS = "x";
@@ -99,13 +103,11 @@ public class MainActivity extends ListActivity {
         TextView tv = (TextView) v.findViewById(R.id.symbol);
         intent.putExtra(CURRENCY_SIGN, tv.getText().toString());
         startActivity(intent);
-
-        //Toast.makeText(this, tv.getText().toString(), Toast.LENGTH_LONG).show();
     }
-    protected void changeListLimit (View view) {
-        //TODO
+    public void changeListLimit (View view) {
+        Intent intent = new Intent(this, ChangingListLimit.class);
+        startActivity(intent);
     }
-
     private class GetCurrencies extends AsyncTask<Void, Void, String> {
 
         ProgressDialog progressDialog;
@@ -125,8 +127,9 @@ public class MainActivity extends ListActivity {
         protected String doInBackground(Void... params) {
 
             Polaczenie polaczenie = new Polaczenie();
-
-            String finalUrl = basic_url.replace(LIMIT_HOLDER, "25");
+            SharedPreferences preferences = getSharedPreferences(MainActivity.LIST_PREFFERENCES, Context.MODE_PRIVATE);
+            String listLimit = String.valueOf(preferences.getInt(MainActivity.KEY_PREFERENCES_LIST_LIMIT, 25));
+            String finalUrl = basic_url.replace(LIMIT_HOLDER, listLimit);
             String response = polaczenie.nawiazPolaczenie(finalUrl, Polaczenie.GET);
 
             Log.d("Response: ", "> " + response);
@@ -169,21 +172,21 @@ public class MainActivity extends ListActivity {
                 ArrayList<HashMap<String, String>> currencyList = new ArrayList<>();
 
                 //JSONObject jsonObject = new JSONObject(json);
-                JSONArray jsonArray = new JSONArray(json);
+                JSONArray curencyArray = new JSONArray(json);
 
                 //HashMap<String, String> waluty = new HashMap<>();
 
-                for(int i = 0; i < jsonArray.length(); i++){
+                for(int i = 0; i < curencyArray.length(); i++){
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    JSONObject currencyObject = curencyArray.getJSONObject(i);
 
-                    String name = jsonObject.getString(NAME);
-                    String rank = jsonObject.getString(RANK);
-                    String symbol = jsonObject.getString(SYMBOL);
-                    String price = jsonObject.getString(PRICE);
-                    String price_change_24h = jsonObject.getString(PERCENT_CHANGE_24h);
-                    String price_change_1h = jsonObject.getString(PERCENT_CHANGE_1h);
-                    String price_change_7d = jsonObject.getString(PERCENT_CHANGE_7d);
+                    String name = currencyObject.getString(NAME);
+                    String rank = currencyObject.getString(RANK);
+                    String symbol = currencyObject.getString(SYMBOL);
+                    String price = currencyObject.getString(PRICE);
+                    String price_change_24h = currencyObject.getString(PERCENT_CHANGE_24h);
+                    String price_change_1h = currencyObject.getString(PERCENT_CHANGE_1h);
+                    String price_change_7d = currencyObject.getString(PERCENT_CHANGE_7d);
 
                     HashMap<String, String> waluty = new HashMap<>();
 

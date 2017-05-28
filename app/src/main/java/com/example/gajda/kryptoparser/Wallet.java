@@ -196,7 +196,7 @@ public class Wallet extends AppCompatActivity {
 
             String response = "";
 
-            /* for wallet balance i don't need full web response, just first 7 lines so i created limit */
+            // for wallet balance i don't need full web response, just first 7 lines so i created limit
             final int lineLimit = 7;
             int lineCounter = 0;
 
@@ -213,6 +213,7 @@ public class Wallet extends AppCompatActivity {
                     response += linia;
                     ++lineCounter;
                 }
+                // after putting on limit the json response is not correct object so i need to fix it here
                 if (response.endsWith(",")) {
                     response = response.substring(0,response.length()-1);
                     response += "}";

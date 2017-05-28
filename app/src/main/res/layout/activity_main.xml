@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/changeListLimit"
+        android:id="@+id/change_list_limit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="changeListLimit"

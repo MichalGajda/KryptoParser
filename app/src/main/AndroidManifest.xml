@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +21,9 @@
             </intent-filter>
         </activity>
         <!-- <activity android:name=".Polaczenie" /> -->
-        <activity android:name=".CalculatorActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".CalculatorActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Wallet"
             android:parentActivityName=".MainActivity" />
@@ -31,8 +33,10 @@
         <activity
             android:name=".CurrencyChartView"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".AboutAuthors"
+        <activity
+            android:name=".AboutAuthors"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".ChangingListLimit"></activity>
     </application>
 
 </manifest>
