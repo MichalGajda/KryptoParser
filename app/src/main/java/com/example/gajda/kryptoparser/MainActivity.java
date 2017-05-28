@@ -59,6 +59,9 @@ public class MainActivity extends ListActivity {
 
         new GetCurrencies().execute();
     }
+    protected void refresh (View view) {
+        new GetCurrencies().execute();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
