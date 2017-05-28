@@ -1,6 +1,8 @@
 package com.example.gajda.kryptoparser;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,20 +11,51 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
+
 public class WebWaletChart extends AppCompatActivity {
+
+    public static final String KEY_WALLET_VALUES = "values";
+    public static final String KEY_X = "x";
+    public static final String KEY_Y = "y";
 
     private final static String formatJson = "https://api.blockchain.info/charts/balance?address=<ADDRESS_HOLDER>&format=json";
     private final static String ADDRESS_HOLDER = "<ADDRESS_HOLDER>";
+
+    private ArrayList<Entry> xValues = new ArrayList<>();
+    private ArrayList<Entry> yValues = new ArrayList<>();
+
+    private String[] xAxis;
+    private String[] yAxis;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_walet_chart);
+        Log.d(MainActivity.PSM_Project_log, "onCreate: ");
+
 
         Intent intent = getIntent();
         String address = intent.getStringExtra(Wallet.URL_CHART);
         String finalUrl = formatJson.replace(ADDRESS_HOLDER, address);
         Log.d("finalUrl: ", finalUrl);
+
+        new WebWaletChart.ReadURLTask().execute(finalUrl);
+
+        LineChart lineChart = (LineChart) findViewById(R.id.walletAsChart);
 
     }
 
@@ -50,4 +83,82 @@ public class WebWaletChart extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    private void parseJson_blockChainWallet(String json) {
+        Log.d(MainActivity.PSM_Project_log, "parseJson_blockChainWallet: " + json);
+
+        if(json != null) {
+            try {
+                JSONObject curencyArray = new JSONObject(json);
+                JSONArray valuesArray = curencyArray.getJSONArray(KEY_WALLET_VALUES);
+
+                int numberOfPoints = valuesArray.length();
+
+                xAxis = new String[numberOfPoints];
+                yAxis = new String[numberOfPoints];
+
+                for(int i = 0; i < numberOfPoints; i++){
+
+                    JSONObject currencyObject = valuesArray.getJSONObject(i);
+
+                    float xValue =  Float.parseFloat(currencyObject.getString(KEY_X));
+                    xValues.add(new Entry(xValue, i));
+                    float yValue =  Float.parseFloat(currencyObject.getString(KEY_Y));
+                    yValues.add(new Entry(yValue, i));
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.d("ServiceHandler", "Nie można pobrać danych z podanego basic_url");
+        }
+    }
+
+    private class ReadURLTask extends AsyncTask<String, Void, String> {
+
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(MainActivity.PSM_Project_log, "onPreExecute");
+            pd = ProgressDialog.show(WebWaletChart.this, " https://blockchain.info/api ", "Downloading data...");
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            Log.d(MainActivity.PSM_Project_log, "doInBackground + urls: " + urls[0]);
+            String response = "";
+            try {
+                URL url = new URL(urls[0]);
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setConnectTimeout(7500);
+                conn.setReadTimeout(7500);
+                conn.connect();
+                InputStream is = conn.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String linia;
+                while((linia = br.readLine()) !=  null ) {
+                    response += linia;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d(MainActivity.PSM_Project_log, "response: " + response);
+
+            return response;
+        }
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+            Log.d(MainActivity.PSM_Project_log, "onPostExecute + response: " + response);
+
+            pd.dismiss();
+            parseJson_blockChainWallet(response);
+//            setTextVievs(response);
+        }
+    }
+
 }
