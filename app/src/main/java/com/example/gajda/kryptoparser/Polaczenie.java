@@ -9,16 +9,15 @@ import java.net.URL;
 class Polaczenie {
 
     final static int GET = 1;
-    private final static int POST = 2;
+    final static int POST = 2;
 
     Polaczenie() {
-
     }
 
     String nawiazPolaczenie(String urladdress, int requestMethod){
 
         URL url;
-        String odpowiedz = "";
+        String responseFromServer = "";
         try {
             url = new URL(urladdress);
 
@@ -41,16 +40,14 @@ class Polaczenie {
                 InputStreamReader isr = new InputStreamReader(connection.getInputStream());
                 BufferedReader br = new BufferedReader(isr);
                 while((message=br.readLine())!= null){
-                    odpowiedz += message;
+                    responseFromServer += message;
                 }
             } else {
-                odpowiedz = "";
+                responseFromServer = "";
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return odpowiedz;
+        return responseFromServer;
     }
-
-
 }

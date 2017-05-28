@@ -54,7 +54,7 @@ public class CurrencyChartView extends AppCompatActivity {
         long day = 86400;
         long month = System.currentTimeMillis()/1000-21*day;
         String currenySymbol = intent.getStringExtra(MainActivity.CURRENCY_SIGN);
-        TextView tv = (TextView) findViewById(R.id.tvCurrency);
+        TextView tv = (TextView) findViewById(R.id.tvSymbol);
         tv.setText(currenySymbol);
         currenyChartURL = url.replace("<SYMBOL_HOLDER>", currenySymbol);
         currenyChartURL = currenyChartURL.replace("<TIME_HOLDER>", String.valueOf(month));
@@ -79,7 +79,6 @@ public class CurrencyChartView extends AppCompatActivity {
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, CalculatorActivity.class);
                 startActivity(intent);
-                //calculator();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
@@ -108,7 +107,7 @@ public class CurrencyChartView extends AppCompatActivity {
             candleStickChart.setVisibility(View.INVISIBLE);
 
             progressDialog = new ProgressDialog(CurrencyChartView.this);
-            progressDialog.setMessage("Proszę czekać...");
+            progressDialog.setMessage(getString(R.string.waitMessage));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -120,7 +119,7 @@ public class CurrencyChartView extends AppCompatActivity {
 
             String jsonData = polaczenie.nawiazPolaczenie(currenyChartURL, Polaczenie.GET);
 
-            Log.d("Odpowiedź: ", "> " + jsonData);
+            Log.d("Response: ", "> " + jsonData);
 
             listaDanych = parseJson(jsonData);
 
@@ -161,7 +160,6 @@ public class CurrencyChartView extends AppCompatActivity {
             textView = (TextView) findViewById(R.id.tvClose);
             textView.setText(getString(R.string.closePrice) + close[getLast].toString());
 
-
             for(int i = 0; i < timeStamp.length; i++){
                 Log.d("Time stamp: " + i, timeStamp[i].toString());
             }
@@ -180,7 +178,6 @@ public class CurrencyChartView extends AppCompatActivity {
             };
 
             XAxis xAxis = candleStickChart.getXAxis();
-            //xAxis.setGranularity(10f);
             xAxis.setValueFormatter(formatter);
 
             dataSet.setValueTextSize(8f);
@@ -197,7 +194,6 @@ public class CurrencyChartView extends AppCompatActivity {
                 Intent intent = new Intent(CurrencyChartView.this,MainActivity.class);
                 startActivity(intent);
             }
-
         }
 
         private ArrayList<Float[]> parseJson(String json){

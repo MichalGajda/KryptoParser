@@ -44,7 +44,7 @@ public class Wallet extends AppCompatActivity {
     private final String KEY_FINAL_BALANCE = "final_balance";
     private final String KEY_ADDRESS = "address";
 
-    private static String address_input = "";
+    private String address_input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class Wallet extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater =  getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu_w, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -92,11 +92,6 @@ public class Wallet extends AppCompatActivity {
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
                 Intent intent1 = new Intent(this, AboutAuthors.class);
                 startActivity(intent1);
-                return true;
-            case R.id.wallet:
-                Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
-                Intent intent2 = new Intent(this, Wallet.class);
-                startActivity(intent2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -251,25 +246,25 @@ public class Wallet extends AppCompatActivity {
 
                 TextView textView = (TextView) findViewById(R.id.total_received);
                 satoshisToBTC = satoshisToBitcoin(total_recived);
-                textView.setText("total_recived: " + satoshisToBTC);
+                textView.setText(getString(R.string.total_received_btc) + satoshisToBTC);
 
                 textView = (TextView) findViewById(R.id.total_sent);
                 satoshisToBTC = satoshisToBitcoin(total_sent);
-                textView.setText("total_sent: " + satoshisToBTC);
+                textView.setText(getString(R.string.total_sent_btc) + satoshisToBTC);
 
                 textView = (TextView) findViewById(R.id.final_balance);
                 satoshisToBTC = satoshisToBitcoin(final_balance);
-                textView.setText("final_balance: " + satoshisToBTC + " Bitcoin");
+                textView.setText(getString(R.string.final_balance_btc) + satoshisToBTC + " Bitcoin");
 
                 textView = (TextView) findViewById(R.id.number_of_transactions);
-                textView.setText("number_of_transactions: " + number_of_transactions);
+                textView.setText(getString(R.string.number_of_transactions) + number_of_transactions);
 
                 textView = (TextView) findViewById(R.id.address_view);
-                textView.setText("address: " + addres_view);
+                textView.setText(getString(R.string.address) + addres_view);
 
             } catch (JSONException e) {
                 //e.printStackTrace();
-                Toast.makeText(Wallet.this, "Check if you typed correct address and try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(Wallet.this, R.string.addres_warning, Toast.LENGTH_LONG).show();
                 setContentView(R.layout.activity_wallet);
             }
         } else {

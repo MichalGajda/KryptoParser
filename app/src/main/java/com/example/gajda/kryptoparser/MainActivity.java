@@ -52,17 +52,12 @@ public class MainActivity extends ListActivity {
     public static final String LIST_PREFFERENCES = "com.example.gajda.kryptoparser.LIST_PREFERENCES";
     public static final String KEY_PREFERENCES_LIST_LIMIT = "com.example.gajda.kryptoparser.LIST_LIMIT";
 
-    private final static String VALUES = "values";
-    private final static String X_AXIS = "x";
-    private final static String Y_AXIS = "y";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         new GetCurrencies().execute();
-        //listView = (ListView) findViewById(R.id.list)
     }
 
     @Override
@@ -79,7 +74,6 @@ public class MainActivity extends ListActivity {
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, CalculatorActivity.class);
                 startActivity(intent);
-                //calculator();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
@@ -154,15 +148,12 @@ public class MainActivity extends ListActivity {
             }
 
             listaWalut = parseJson_coinmarketcap(response);
-
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
                     new String[]{NAME, SYMBOL, PRICE, PERCENT_CHANGE_24h, PERCENT_CHANGE_1h, PERCENT_CHANGE_7d},
                     new int[]{R.id.name, R.id.symbol, R.id.price, R.id.percent_change_24h, R.id.percent_change_1h, R.id.percent_change_7d});
-
             setListAdapter(adapter);
         }
-
     }
 
     private ArrayList<HashMap<String, String>> parseJson_coinmarketcap(String json) {
@@ -170,11 +161,7 @@ public class MainActivity extends ListActivity {
             try {
 
                 ArrayList<HashMap<String, String>> currencyList = new ArrayList<>();
-
-                //JSONObject jsonObject = new JSONObject(json);
                 JSONArray curencyArray = new JSONArray(json);
-
-                //HashMap<String, String> waluty = new HashMap<>();
 
                 for(int i = 0; i < curencyArray.length(); i++){
 
@@ -211,7 +198,6 @@ public class MainActivity extends ListActivity {
         }
     }
 
-
     public void saveToFile(String raw_jason, String file_name) {
         Log.d(PSM_Project_log, "save to file + raw_json: " + raw_jason);
         try {
@@ -244,17 +230,5 @@ public class MainActivity extends ListActivity {
         }
 
         return stringBuilder.toString();
-    }
-
-
-//    public void calculator(){
-//
-//        Intent intent = new Intent(this, CalculatorActivity.class);
-//        startActivity(intent);
-//    }
-
-    public void goToWalet(View view) {
-        Intent intent = new Intent(this, Wallet.class);
-        startActivity(intent);
     }
 }

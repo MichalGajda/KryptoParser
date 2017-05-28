@@ -19,7 +19,7 @@ public class AboutAuthors extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater =  getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
+        menuInflater.inflate(R.menu.menu_a, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -31,11 +31,6 @@ public class AboutAuthors extends AppCompatActivity {
                 Intent intent = new Intent(this, CalculatorActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.about:
-                Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(this, AboutAuthors.class);
-                startActivity(intent1);
-                return true;
             case R.id.wallet:
                 Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
                 Intent intent2 = new Intent(this, Wallet.class);
@@ -45,5 +40,4 @@ public class AboutAuthors extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

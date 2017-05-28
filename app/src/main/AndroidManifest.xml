@@ -36,7 +36,7 @@
         <activity
             android:name=".AboutAuthors"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ChangingListLimit"></activity>
+        <activity android:name=".ChangingListLimit"/>
     </application>
 
 </manifest>

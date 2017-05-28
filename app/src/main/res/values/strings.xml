@@ -18,5 +18,30 @@
     <string name="percent_change_7d">percent_change_7d:</string>
     <string name="hp">High price:</string>
     <string name="wallet">Wallet</string>
+    <string name="from_calculator">From</string>
+    <string name="to_calculator">To</string>
+    <string name="search_label">Search</string>
+    <string name="search_hint">Search currencies</string>
+    <string name="calculator_warning">Both parameters are required</string>
+    <string name="chartDataInfo">All prices are comparised to Bitcoin</string>
+    <string name="progressDialogMSG">Please wait</string>
+    <string name="waitMessage">Please wait</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="calculate">Calculate</string>
+    <string name="total_received_btc">Total recived:</string>
+    <string name="total_sent_btc">Total sent:</string>
+    <string name="final_balance_btc">Final balance:</string>
+    <string name="number_of_transactions">Number of transactions:</string>
+    <string name="address">Address:</string>
+    <string name="addres_warning">Check if you typed correct address and try again</string>
+
+    <string-array name="real_currencies">
+        <item>pln</item>
+        <item>usd</item>
+        <item>eur</item>
+        <item>gbp</item>
+        <item>rur</item>
+    </string-array>
 
 </resources>

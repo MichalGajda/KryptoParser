@@ -26,8 +26,6 @@ public class WebWaletChart extends AppCompatActivity {
 
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater =  getMenuInflater();
@@ -40,9 +38,13 @@ public class WebWaletChart extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.calculator:
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, CalculatorActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, AboutAuthors.class);
+                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
