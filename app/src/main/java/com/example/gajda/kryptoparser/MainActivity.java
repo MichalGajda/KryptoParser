@@ -106,7 +106,7 @@ public class MainActivity extends ListActivity {
         //TODO
     }
 
-    private class GetCurrencies extends AsyncTask<Void, Void, Void> {
+    private class GetCurrencies extends AsyncTask<Void, Void, String> {
 
         ProgressDialog progressDialog;
         ArrayList<HashMap<String, String>> listaWalut;
@@ -122,35 +122,35 @@ public class MainActivity extends ListActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
 
             Polaczenie polaczenie = new Polaczenie();
 
             String finalUrl = basic_url.replace(LIMIT_HOLDER, "25");
-            String jsonString = polaczenie.nawiazPolaczenie(finalUrl, Polaczenie.GET);
+            String response = polaczenie.nawiazPolaczenie(finalUrl, Polaczenie.GET);
 
-            Log.d("Response: ", "> " + jsonString);
+            Log.d("Response: ", "> " + response);
 
-            if (!jsonString.isEmpty()) {
-                saveToFile(jsonString, LIST_FILE_NAME);
-            } else {
-                jsonString = loadFile(LIST_FILE_NAME);
-                if(progressDialog.isShowing())
-                    progressDialog.dismiss();
-                Toast.makeText(MainActivity.this, "no internet connection, loading last downloadet data", Toast.LENGTH_LONG).show();
-            }
-
-            listaWalut = parseJson_coinmarketcap(jsonString);
-
-            return null;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
 
             if(progressDialog.isShowing())
                 progressDialog.dismiss();
+
+            if (!response.isEmpty()) {
+                saveToFile(response, LIST_FILE_NAME);
+            } else {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+                response = loadFile(LIST_FILE_NAME);
+                Toast.makeText(MainActivity.this, "no internet connection, loading last downloaded data", Toast.LENGTH_LONG).show();
+            }
+
+            listaWalut = parseJson_coinmarketcap(response);
 
             ListAdapter adapter = new SimpleAdapter(
                     MainActivity.this, listaWalut, R.layout.list_item,
@@ -239,6 +239,7 @@ public class MainActivity extends ListActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return stringBuilder.toString();
     }
 

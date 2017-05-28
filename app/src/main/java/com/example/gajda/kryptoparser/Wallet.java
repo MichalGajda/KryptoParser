@@ -137,7 +137,7 @@ public class Wallet extends AppCompatActivity {
         editText.setText("");
     }
     public void saveToFile (String toSave, String file_name) {
-        Log.d(MainActivity.PSM_Project_log, "save to file + raw_json: " + toSave);
+        Log.d(MainActivity.PSM_Project_log, "save to file + toSave: " + toSave);
         try {
             String alreadySaved = loadFile(WALLET_FILE_NAME);
             if (!alreadySaved.contains(toSave)) {
@@ -196,7 +196,7 @@ public class Wallet extends AppCompatActivity {
 
             String response = "";
 
-            // for wallet balance i don't need full web response, just first 7 lines so i created this limit
+            /* for wallet balance i don't need full web response, just first 7 lines so i created limit */
             final int lineLimit = 7;
             int lineCounter = 0;
 
