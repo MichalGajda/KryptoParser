@@ -3,29 +3,33 @@ package com.example.gajda.kryptoparser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 public class WebWaletChart extends AppCompatActivity {
 
+    private final static String formatJson = "https://api.blockchain.info/charts/balance?address=<ADDRESS_HOLDER>&format=json";
+    private final static String ADDRESS_HOLDER = "<ADDRESS_HOLDER>";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_walet_chart);
 
-        WebView webView = (WebView) findViewById(R.id.walet_balance_chart);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
         Intent intent = getIntent();
-        webView.loadUrl(intent.getStringExtra(Wallet.URL_CHART));
+        String address = intent.getStringExtra(Wallet.URL_CHART);
+        String finalUrl = formatJson.replace(ADDRESS_HOLDER, address);
+        Log.d("finalUrl: ", finalUrl);
+
     }
 
+
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater =  getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);

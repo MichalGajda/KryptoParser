@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -203,8 +202,8 @@ public class Wallet extends AppCompatActivity {
             try {
                 URL url = new URL(urls[0]);
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setConnectTimeout(15000);
-                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(7500);
+                conn.setReadTimeout(7500);
                 conn.connect();
                 InputStream is = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -281,31 +280,9 @@ public class Wallet extends AppCompatActivity {
         return Double.parseDouble(satoshis) / Math.pow(10,8);
     }
 
-    protected void setVisibility(int visibility) {
-        TextView textView;
-        textView = (TextView) findViewById(R.id.final_balance);
-        textView.setVisibility(visibility);
-        textView = (TextView) findViewById(R.id.number_of_transactions);
-        textView.setVisibility(visibility);
-        textView = (TextView) findViewById(R.id.total_sent);
-        textView.setVisibility(visibility);
-        textView = (TextView) findViewById(R.id.total_received);
-        textView.setVisibility(visibility);
-
-        Button button;
-        button = (Button) findViewById(R.id.saveCurrentAddress);
-        button.setVisibility(visibility);
-        button = (Button) findViewById(R.id.show_history_as_chart);
-        button.setVisibility(visibility);
-    }
     protected void showHistoryAsChart(View view) {
-        if (!address_input.isEmpty()) {
-            String address_url = url_base_chart.replace("<PLACE_HOLDER>", address_input);
             Intent intent = new Intent(this, WebWaletChart.class);
-            intent.putExtra(URL_CHART, address_url);
+            intent.putExtra(URL_CHART, address_input);
             startActivity(intent);
-        } else {
-            Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
-        }
     }
 }
