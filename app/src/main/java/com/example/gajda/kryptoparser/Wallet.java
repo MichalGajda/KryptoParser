@@ -136,7 +136,7 @@ public class Wallet extends AppCompatActivity {
             String alreadySaved = loadFile(WALLET_FILE_NAME);
             if (!alreadySaved.contains(toSave)) {
                 FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
-                fileOutputStream.write((alreadySaved + "\n" + toSave).getBytes());
+                fileOutputStream.write((alreadySaved + "\n " + toSave).getBytes());
                 fileOutputStream.close();
                 Log.d(MainActivity.PSM_Project_log,"file saved");
                 Toast.makeText(Wallet.this, "address saved", Toast.LENGTH_SHORT).show();
