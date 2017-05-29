@@ -44,7 +44,7 @@ public class Wallet extends AppCompatActivity {
     private final String KEY_FINAL_BALANCE = "final_balance";
     private final String KEY_ADDRESS = "address";
 
-    private String address_input = "";
+    private static String address_input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +135,7 @@ public class Wallet extends AppCompatActivity {
             String alreadySaved = loadFile(WALLET_FILE_NAME);
             if (!alreadySaved.contains(toSave)) {
                 FileOutputStream fileOutputStream = openFileOutput(file_name, Context.MODE_PRIVATE);
-                fileOutputStream.write((alreadySaved + "\n" + toSave).getBytes());
+                fileOutputStream.write((alreadySaved + "\n " + toSave).getBytes());
                 fileOutputStream.close();
                 Log.d(MainActivity.PSM_Project_log,"file saved");
                 Toast.makeText(Wallet.this, "address saved", Toast.LENGTH_SHORT).show();
@@ -279,7 +279,7 @@ public class Wallet extends AppCompatActivity {
     }
 
     public void showHistoryAsChart(View view) {
-            Intent intent = new Intent(this, WebWaletChart.class);
+            Intent intent = new Intent(this, WebWalletChart.class);
             intent.putExtra(URL_CHART, address_input);
             startActivity(intent);
     }

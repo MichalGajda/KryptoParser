@@ -2,6 +2,7 @@ package com.example.gajda.kryptoparser;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,18 +29,16 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class WebWaletChart extends AppCompatActivity {
+public class WebWalletChart extends AppCompatActivity {
 
     public static final String KEY_WALLET_VALUES = "values";
     public static final String KEY_X = "x";
     public static final String KEY_Y = "y";
 
-    private final static String formatJson = "https://api.blockchain.info/charts/balance?address=<ADDRESS_HOLDER>&format=json";
+    private final static String formatJson = "https://api.blockchain.info/charts/balance?address=<ADDRESS_HOLDER>&format=json"; //&format=json&timespan=30days
     private final static String ADDRESS_HOLDER = "<ADDRESS_HOLDER>";
 
-    private ArrayList<String> xAxes = new ArrayList<>();
-    private ArrayList<Entry> xValues = new ArrayList<>();
-    private ArrayList<Entry> yValues = new ArrayList<>();
+    private LineChart lineChart;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -51,10 +52,9 @@ public class WebWaletChart extends AppCompatActivity {
         String finalUrl = formatJson.replace(ADDRESS_HOLDER, address);
         Log.d("finalUrl: ", finalUrl);
 
-        new WebWaletChart.ReadURLTask().execute(finalUrl);
+        lineChart = (LineChart) findViewById(R.id.walletAsChart);
 
-        LineChart lineChart = (LineChart) findViewById(R.id.walletAsChart);
-
+        new WebWalletChart.ReadURLTask().execute(finalUrl);
     }
 
     @Override
@@ -84,31 +84,51 @@ public class WebWaletChart extends AppCompatActivity {
     private void parseJson_blockChainWallet(String json) {
         Log.d(MainActivity.PSM_Project_log, "parseJson_blockChainWallet: " + json);
 
+//        ArrayList<String> xAxes = new ArrayList<>();
+        ArrayList<Entry> entries = new ArrayList<>();
+        long day = 86400;
+
         if(json != null) {
             try {
-                JSONObject curencyArray = new JSONObject(json);
-                JSONArray valuesArray = curencyArray.getJSONArray(KEY_WALLET_VALUES);
+                JSONObject addressJson = new JSONObject(json);
+                JSONArray valuesArray = addressJson.getJSONArray(KEY_WALLET_VALUES);
 
                 int numberOfPoints = valuesArray.length();
+                long d = java.lang.System.currentTimeMillis();
 
                 for(int i = 0; i < numberOfPoints; i++){
 
-                    JSONObject currencyObject = valuesArray.getJSONObject(i);
+                    JSONObject xyObject = valuesArray.getJSONObject(i);
 
-                    //TODO
-                    float xValue =  Float.parseFloat(currencyObject.getString(KEY_X));
-                    xValues.add(new Entry(xValue, i));
-                    float yValue =  Float.parseFloat(currencyObject.getString(KEY_Y));
-                    yValues.add(new Entry(yValue, i));
+                    float xValue =  Float.parseFloat(xyObject.getString(KEY_X));
+                    //xValue /= day;
+                    xValue /= (360*day);
+                    float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
+                    entries.add(new Entry(xValue, yValue));
+
+                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue);
 
                 }
 
+                LineDataSet dataSet = new LineDataSet(entries, "wallet as chart");
+//                dataSet.setDrawCircles(true);
+                dataSet.setColor(Color.BLUE);
+                dataSet.setValueTextColor(Color.RED);
+
+                LineData lineData = new LineData(dataSet);
+
+                lineChart.setData(lineData);
+                lineChart.invalidate(); // refresh
+//                lineDataSets.add(dataSet);
+//
+//                lineChart.setVisibility(View.VISIBLE);
+//                lineChart.setVisibleXRangeMinimum(1496046892f);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            Log.d("ServiceHandler", "Nie można pobrać danych z podanego basic_url");
+            Log.d("ServiceHandler", "can't download data from  url");
         }
     }
 
@@ -120,7 +140,7 @@ public class WebWaletChart extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Log.d(MainActivity.PSM_Project_log, "onPreExecute");
-            pd = ProgressDialog.show(WebWaletChart.this, " https://blockchain.info/api ", "Downloading data...");
+            pd = ProgressDialog.show(WebWalletChart.this, " https://blockchain.info/api ", "Downloading data...");
         }
 
         @Override
@@ -135,9 +155,9 @@ public class WebWaletChart extends AppCompatActivity {
                 conn.connect();
                 InputStream is = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String linia;
-                while((linia = br.readLine()) !=  null ) {
-                    response += linia;
+                String line;
+                while((line = br.readLine()) !=  null ) {
+                    response += line;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -153,7 +173,6 @@ public class WebWaletChart extends AppCompatActivity {
 
             pd.dismiss();
             parseJson_blockChainWallet(response);
-//            setTextVievs(response);
         }
     }
 
