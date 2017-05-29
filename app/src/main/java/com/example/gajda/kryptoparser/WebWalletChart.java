@@ -127,13 +127,18 @@ public class WebWalletChart extends AppCompatActivity {
                     Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue + " \t " + "dates: " + dates[i]);
 
                 }
-                for (int i = x.length-1; i >=0 ; --i)
+
+                final String[] dateReversed = new String[dates.length];
+                int j = 0;
+                for (int i = x.length-1; i >=0 ; --i) {
                     entries.add(new Entry(x[i], y[i]));
+                    dateReversed[j++] = dates[i];
+                }
 
                 IAxisValueFormatter formatter = new IAxisValueFormatter() {
                     @Override
                     public String getFormattedValue(float value, AxisBase axis) {
-                        return dates[(int) value];
+                        return dateReversed[(int) value];
                     }
                 };
 
@@ -141,6 +146,7 @@ public class WebWalletChart extends AppCompatActivity {
 //                dataSet.setDrawCircles(true);
                 dataSet.setColor(Color.BLUE);
                 dataSet.setValueTextColor(Color.RED);
+                dataSet.setValueTextSize(0f);
 
                 LineData lineData = new LineData(dataSet);
 
@@ -149,7 +155,8 @@ public class WebWalletChart extends AppCompatActivity {
 
 
                 lineChart.setData(lineData);
-                lineChart.invalidate(); // refresh
+                lineChart.invalidate();
+
 //                lineDataSets.add(dataSet);
 //
 //                lineChart.setVisibility(View.VISIBLE);
