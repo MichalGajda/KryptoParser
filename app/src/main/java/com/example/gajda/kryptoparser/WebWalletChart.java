@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +28,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -81,10 +86,18 @@ public class WebWalletChart extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private String dateConverter(Float arg){
+        Date date = new Date(arg.longValue()*1000);
+        @SuppressWarnings("deprecation")
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM", getResources().getConfiguration().locale);
+        return sdf.format(date);
+    }
+
     private void parseJson_blockChainWallet(String json) {
         Log.d(MainActivity.PSM_Project_log, "parseJson_blockChainWallet: " + json);
 
-//        ArrayList<String> xAxes = new ArrayList<>();
+        final String[] dates;
         ArrayList<Entry> entries = new ArrayList<>();
         long day = 86400;
 
@@ -94,6 +107,8 @@ public class WebWalletChart extends AppCompatActivity {
                 JSONArray valuesArray = addressJson.getJSONArray(KEY_WALLET_VALUES);
 
                 int numberOfPoints = valuesArray.length();
+                dates = new String[numberOfPoints];
+
                 long d = java.lang.System.currentTimeMillis();
 
                 for(int i = 0; i < numberOfPoints; i++){
@@ -101,14 +116,20 @@ public class WebWalletChart extends AppCompatActivity {
                     JSONObject xyObject = valuesArray.getJSONObject(i);
 
                     float xValue =  Float.parseFloat(xyObject.getString(KEY_X));
-                    //xValue /= day;
-                    xValue /= (360*day);
+                    dates[i] = (dateConverter(xValue));
                     float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
                     entries.add(new Entry(xValue, yValue));
 
-                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue);
+                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + dates[i]);
 
                 }
+
+                IAxisValueFormatter formatter = new IAxisValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value, AxisBase axis) {
+                        return dates[(int) value];
+                    }
+                };
 
                 LineDataSet dataSet = new LineDataSet(entries, "wallet as chart");
 //                dataSet.setDrawCircles(true);
@@ -116,6 +137,9 @@ public class WebWalletChart extends AppCompatActivity {
                 dataSet.setValueTextColor(Color.RED);
 
                 LineData lineData = new LineData(dataSet);
+
+                XAxis xAxis = lineChart.getXAxis();
+                xAxis.setValueFormatter(formatter);
 
                 lineChart.setData(lineData);
                 lineChart.invalidate(); // refresh
@@ -131,6 +155,7 @@ public class WebWalletChart extends AppCompatActivity {
             Log.d("ServiceHandler", "can't download data from  url");
         }
     }
+
 
     private class ReadURLTask extends AsyncTask<String, Void, String> {
 
