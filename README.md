@@ -42,21 +42,20 @@ Goal of the application is to facilitate getting data about cryptocurrencies.
     -User can reset saved addresses
     <br>
     -User can change activity by clicking on menu icon located in action bar
-    
-    <h1><b>Documentation</b></h1>
-    <b>Used api:</b>
     <br>
-    - https://www.cryptonator.com/api
+    Documentation
+    Used api:
     <br>
-    - https://poloniex.com/api
+    -https://www.cryptonator.com/api
     <br>
-    - https://api.coinmarketcap.com
+    -https://poloniex.com/api
     <br>
-    - https://blockchain.info
-    
-    
-    
-    
+    -https://api.coinmarketcap.com
+    <br>
+    -https://blockchain.info
+    <br>
     Authors:
+    <br>
 -Marcin Gajda
+<br>
 -Michał Gajda
