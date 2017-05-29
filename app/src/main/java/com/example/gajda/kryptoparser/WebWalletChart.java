@@ -99,7 +99,6 @@ public class WebWalletChart extends AppCompatActivity {
 
         final String[] dates;
         ArrayList<Entry> entries = new ArrayList<>();
-        long day = 86400;
 
         if(json != null) {
             try {
