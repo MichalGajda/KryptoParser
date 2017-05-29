@@ -3,9 +3,9 @@ This is KryptoParser's application website.
 
 Goal of the application is to facilitate getting data about cryptocurrencies.
 <br>
-Functionality:
+<h1><b>Functionality:</b></h1>
 <br>
-  -Main activity functionality:
+ <b>-Main activity functionality:</b>
   <br>
     -Displays list of the biggest cryptocurrencies
     <br>
@@ -17,13 +17,13 @@ Functionality:
     <br>
     -User can change activity by clicking on menu icon located in action bar
     <br>
-  -About authors functionality:
+  <b>-About authors functionality:</b>
   <br>
     -User can check data about application creators,
     <br>
     -User can change activity by clicking on menu icon located in action bar
     <br>
-  -Calculator activity functionality:
+  <b>-Calculator activity functionality:</b>
   <br>
     -User can choose two cryptocurrencies from the list of over three hundreds cryptocurrencies and pair them to each other, to get exact price comparison
     <br>
@@ -31,7 +31,7 @@ Functionality:
     <br>
     -User can change activity by clicking on menu icon located in action bar
     <br>
-  -Wallet activity functionality:
+  <b>-Wallet activity functionality:</b>
   <br>
     -User can get data of any bitcoin wallet by providing wallet address and check its transactions as a graph
     <br>
