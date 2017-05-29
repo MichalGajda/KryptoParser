@@ -151,7 +151,6 @@ public class CurrencyChartView extends AppCompatActivity {
             CandleDataSet dataSet = new CandleDataSet(candleEntries, "Data of cryptocurrency");
 
             TextView textView = (TextView) findViewById(R.id.tvHigh);
-            //String s =  String.format("%d",high[getLast]);
             textView.setText(getString(R.string.highPrice) + high[getLast].toString());
             textView = (TextView) findViewById(R.id.tvLow);
             textView.setText(getString(R.string.lowPrice) + low[getLast].toString());
@@ -159,10 +158,6 @@ public class CurrencyChartView extends AppCompatActivity {
             textView.setText(getString(R.string.openPrice) + open[getLast].toString());
             textView = (TextView) findViewById(R.id.tvClose);
             textView.setText(getString(R.string.closePrice) + close[getLast].toString());
-
-            for(int i = 0; i < timeStamp.length; i++){
-                Log.d("Time stamp: " + i, timeStamp[i].toString());
-            }
 
             final String[] etykiety = new String[timeStamp.length];
             for(int i = 0; i < timeStamp.length; i++){

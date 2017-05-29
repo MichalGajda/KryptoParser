@@ -20,7 +20,7 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Application created as an assignment of 'Mobile Systems Programming' subject on University of Economics in Cracow" />
+        android:text="@string/disclaimer" />
 
     <TextView
         android:id="@+id/textView8"

@@ -82,6 +82,10 @@ public class WebWalletChart extends AppCompatActivity {
                 Intent intent1 = new Intent(this, AboutAuthors.class);
                 startActivity(intent1);
                 return true;
+            case R.id.wallet:
+                Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
+                Intent intent2 = new Intent(this, Wallet.class);
+                startActivity(intent2);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -109,8 +113,8 @@ public class WebWalletChart extends AppCompatActivity {
 
                 int numberOfPoints = valuesArray.length();
                 dates = new String[numberOfPoints];
-                y = new float[numberOfPoints]; //test
-                x = new float[numberOfPoints]; //test
+                y = new float[numberOfPoints];
+                x = new float[numberOfPoints];
 
                 for(int i = 0; i < numberOfPoints; i++){
 
@@ -123,23 +127,12 @@ public class WebWalletChart extends AppCompatActivity {
                     float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
                     y[i] = yValue;
 
-//                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue + " \t " + "dates: " + dates[i]);
-
                 }
 
-//                final String[] dateReversed = new String[dates.length];
                 int j = 0;
                 for (int i = x.length-1; i >=0 ; --i) {
                     entries.add(new Entry(x[i], y[i]));
-//                    dateReversed[j++] = dates[i];
                 }
-
-//                IAxisValueFormatter formatter = new IAxisValueFormatter() {
-//                    @Override
-//                    public String getFormattedValue(float value, AxisBase xAxis) {
-//                        return dateReversed[(int) value];
-//                    }
-//                };
 
                 LineDataSet dataSet = new LineDataSet(entries, "wallet as chart");
 //                dataSet.setDrawCircles(true);
@@ -162,7 +155,6 @@ public class WebWalletChart extends AppCompatActivity {
             Log.d("ServiceHandler", "can't download data from  url");
         }
     }
-
 
     private class ReadURLTask extends AsyncTask<String, Void, String> {
 
@@ -207,5 +199,4 @@ public class WebWalletChart extends AppCompatActivity {
             parseJson_blockChainWallet(response);
         }
     }
-
 }
