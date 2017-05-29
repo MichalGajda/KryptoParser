@@ -62,20 +62,12 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/et_quantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/calc_quantity"
-        android:inputType="number" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="sendRequest"
-        android:text="@string/calculate" />
+        android:text="@string/get_exchange_rate" />
 
     <TextView
         android:id="@+id/tv_finalURL"
@@ -83,6 +75,29 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:hint="@string/exchange_rate"/>
+
+    <EditText
+        android:id="@+id/et_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/calc_quantity"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="calculate"
+        android:text="@string/calculate" />
+
+    <TextView
+        android:id="@+id/tv_finalResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:hint="@string/result"/>
 
 </LinearLayout>
