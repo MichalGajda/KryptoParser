@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class WebWaletChart extends AppCompatActivity {
+public class WebWalletChart extends AppCompatActivity {
 
     public static final String KEY_WALLET_VALUES = "values";
     public static final String KEY_X = "x";
@@ -54,7 +54,7 @@ public class WebWaletChart extends AppCompatActivity {
 
         lineChart = (LineChart) findViewById(R.id.walletAsChart);
 
-        new WebWaletChart.ReadURLTask().execute(finalUrl);
+        new WebWalletChart.ReadURLTask().execute(finalUrl);
     }
 
     @Override
@@ -86,29 +86,34 @@ public class WebWaletChart extends AppCompatActivity {
 
 //        ArrayList<String> xAxes = new ArrayList<>();
         ArrayList<Entry> entries = new ArrayList<>();
+        long day = 86400;
 
         if(json != null) {
             try {
-                JSONObject curencyArray = new JSONObject(json);
-                JSONArray valuesArray = curencyArray.getJSONArray(KEY_WALLET_VALUES);
+                JSONObject addressJson = new JSONObject(json);
+                JSONArray valuesArray = addressJson.getJSONArray(KEY_WALLET_VALUES);
 
                 int numberOfPoints = valuesArray.length();
+                long d = java.lang.System.currentTimeMillis();
 
                 for(int i = 0; i < numberOfPoints; i++){
 
-                    JSONObject currencyObject = valuesArray.getJSONObject(i);
+                    JSONObject xyObject = valuesArray.getJSONObject(i);
 
-                    float xValue =  Float.parseFloat(currencyObject.getString(KEY_X));
-                    float yValue =  Float.parseFloat(currencyObject.getString(KEY_Y));
+                    float xValue =  Float.parseFloat(xyObject.getString(KEY_X));
+                    //xValue /= day;
+                    xValue /= (360*day);
+                    float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
                     entries.add(new Entry(xValue, yValue));
 
-                    Log.d("test ", xValue + "         " + yValue);
+                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue);
 
                 }
 
-                LineDataSet dataSet = new LineDataSet(entries, "test111");
-                dataSet.setDrawCircles(true);
+                LineDataSet dataSet = new LineDataSet(entries, "wallet as chart");
+//                dataSet.setDrawCircles(true);
                 dataSet.setColor(Color.BLUE);
+                dataSet.setValueTextColor(Color.RED);
 
                 LineData lineData = new LineData(dataSet);
 
@@ -116,7 +121,6 @@ public class WebWaletChart extends AppCompatActivity {
                 lineChart.invalidate(); // refresh
 //                lineDataSets.add(dataSet);
 //
-//                lineChart.setData(new LineData(lineDataSets));
 //                lineChart.setVisibility(View.VISIBLE);
 //                lineChart.setVisibleXRangeMinimum(1496046892f);
 
@@ -136,7 +140,7 @@ public class WebWaletChart extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Log.d(MainActivity.PSM_Project_log, "onPreExecute");
-            pd = ProgressDialog.show(WebWaletChart.this, " https://blockchain.info/api ", "Downloading data...");
+            pd = ProgressDialog.show(WebWalletChart.this, " https://blockchain.info/api ", "Downloading data...");
         }
 
         @Override
@@ -151,9 +155,9 @@ public class WebWaletChart extends AppCompatActivity {
                 conn.connect();
                 InputStream is = conn.getInputStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String linia;
-                while((linia = br.readLine()) !=  null ) {
-                    response += linia;
+                String line;
+                while((line = br.readLine()) !=  null ) {
+                    response += line;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -169,7 +173,6 @@ public class WebWaletChart extends AppCompatActivity {
 
             pd.dismiss();
             parseJson_blockChainWallet(response);
-//            setTextVievs(response);
         }
     }
 

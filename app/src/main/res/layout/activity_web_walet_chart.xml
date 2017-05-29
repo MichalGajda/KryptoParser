@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.gajda.kryptoparser.WebWaletChart">
+    tools:context="com.example.gajda.kryptoparser.WebWalletChart">
 
     <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/walletAsChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/walletAsChart">
+        android:visibility="visible">
 
 
     </com.github.mikephil.charting.charts.LineChart>

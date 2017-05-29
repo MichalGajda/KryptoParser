@@ -44,7 +44,7 @@ public class Wallet extends AppCompatActivity {
     private final String KEY_FINAL_BALANCE = "final_balance";
     private final String KEY_ADDRESS = "address";
 
-    private String address_input = "";
+    private static String address_input = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +280,7 @@ public class Wallet extends AppCompatActivity {
     }
 
     public void showHistoryAsChart(View view) {
-            Intent intent = new Intent(this, WebWaletChart.class);
+            Intent intent = new Intent(this, WebWalletChart.class);
             intent.putExtra(URL_CHART, address_input);
             startActivity(intent);
     }

@@ -30,7 +30,7 @@
             android:name=".Wallet"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".WebWaletChart"
+            android:name=".WebWalletChart"
             android:parentActivityName=".Wallet" />
         <activity
             android:name=".CurrencyChartView"
