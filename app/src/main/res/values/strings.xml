@@ -40,6 +40,7 @@
     <string name="exchange_rate">Exchange rate</string>
     <string name="calculate">Calculate</string>
     <string name="result">result</string>
+    <string name="show_history_as_chart">show history as chart</string>
 
     <string-array name="real_currencies">
         <item>pln</item>

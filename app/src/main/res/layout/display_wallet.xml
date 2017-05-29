@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="showHistoryAsChart"
-        android:text="show_history_as_chart" />
+        android:text="@string/show_history_as_chart" />
 
     <TextView
         android:id="@+id/address_view"

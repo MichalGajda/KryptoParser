@@ -13,11 +13,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -124,23 +123,23 @@ public class WebWalletChart extends AppCompatActivity {
                     float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
                     y[i] = yValue;
 
-                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue + " \t " + "dates: " + dates[i]);
+//                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue + " \t " + "dates: " + dates[i]);
 
                 }
 
-                final String[] dateReversed = new String[dates.length];
+//                final String[] dateReversed = new String[dates.length];
                 int j = 0;
                 for (int i = x.length-1; i >=0 ; --i) {
                     entries.add(new Entry(x[i], y[i]));
-                    dateReversed[j++] = dates[i];
+//                    dateReversed[j++] = dates[i];
                 }
 
-                IAxisValueFormatter formatter = new IAxisValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value, AxisBase axis) {
-                        return dateReversed[(int) value];
-                    }
-                };
+//                IAxisValueFormatter formatter = new IAxisValueFormatter() {
+//                    @Override
+//                    public String getFormattedValue(float value, AxisBase xAxis) {
+//                        return dateReversed[(int) value];
+//                    }
+//                };
 
                 LineDataSet dataSet = new LineDataSet(entries, "wallet as chart");
 //                dataSet.setDrawCircles(true);
@@ -150,8 +149,8 @@ public class WebWalletChart extends AppCompatActivity {
 
                 LineData lineData = new LineData(dataSet);
 
-//                XAxis xAxis = lineChart.getXAxis();
-//                xAxis.setValueFormatter(formatter);
+                XAxis xAxis = lineChart.getXAxis();
+                xAxis.setEnabled(false);
 
                 lineChart.setData(lineData);
                 lineChart.invalidate();
