@@ -100,8 +100,8 @@ public class WebWalletChart extends AppCompatActivity {
 
         final String[] dates;
         ArrayList<Entry> entries = new ArrayList<>();
-        float[] x;//test
-        float[] y;//test
+        float[] x;
+        float[] y;
 
         if(json != null) {
             try {
@@ -112,8 +112,6 @@ public class WebWalletChart extends AppCompatActivity {
                 dates = new String[numberOfPoints];
                 y = new float[numberOfPoints]; //test
                 x = new float[numberOfPoints]; //test
-
-//                long d = java.lang.System.currentTimeMillis();
 
                 for(int i = 0; i < numberOfPoints; i++){
 
@@ -155,14 +153,8 @@ public class WebWalletChart extends AppCompatActivity {
 //                XAxis xAxis = lineChart.getXAxis();
 //                xAxis.setValueFormatter(formatter);
 
-
                 lineChart.setData(lineData);
                 lineChart.invalidate();
-
-//                lineDataSets.add(dataSet);
-//
-//                lineChart.setVisibility(View.VISIBLE);
-//                lineChart.setVisibleXRangeMinimum(1496046892f);
 
             } catch (JSONException e) {
                 e.printStackTrace();
