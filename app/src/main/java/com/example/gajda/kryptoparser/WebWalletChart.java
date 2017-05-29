@@ -53,7 +53,9 @@ public class WebWalletChart extends AppCompatActivity {
 
         Intent intent = getIntent();
         String address = intent.getStringExtra(Wallet.URL_CHART);
+        address = address.trim();
         String finalUrl = formatJson.replace(ADDRESS_HOLDER, address);
+        finalUrl = finalUrl.trim();
         Log.d("finalUrl: ", finalUrl);
 
         lineChart = (LineChart) findViewById(R.id.walletAsChart);
