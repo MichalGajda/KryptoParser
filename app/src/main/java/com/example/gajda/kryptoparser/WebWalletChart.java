@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -99,6 +98,8 @@ public class WebWalletChart extends AppCompatActivity {
 
         final String[] dates;
         ArrayList<Entry> entries = new ArrayList<>();
+        float[] x;//test
+        float[] y;//test
 
         if(json != null) {
             try {
@@ -107,8 +108,10 @@ public class WebWalletChart extends AppCompatActivity {
 
                 int numberOfPoints = valuesArray.length();
                 dates = new String[numberOfPoints];
+                y = new float[numberOfPoints]; //test
+                x = new float[numberOfPoints]; //test
 
-                long d = java.lang.System.currentTimeMillis();
+//                long d = java.lang.System.currentTimeMillis();
 
                 for(int i = 0; i < numberOfPoints; i++){
 
@@ -116,12 +119,16 @@ public class WebWalletChart extends AppCompatActivity {
 
                     float xValue =  Float.parseFloat(xyObject.getString(KEY_X));
                     dates[i] = (dateConverter(xValue));
-                    float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
-                    entries.add(new Entry(xValue, yValue));
+                    x[i] = xValue;
 
-                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + dates[i]);
+                    float yValue =  Float.parseFloat(xyObject.getString(KEY_Y));
+                    y[i] = yValue;
+
+                    Log.d("test ","xValue: " + xValue + " \t " +"yValue: " + yValue + " \t " + "dates: " + dates[i]);
 
                 }
+                for (int i = x.length-1; i >=0 ; --i)
+                    entries.add(new Entry(x[i], y[i]));
 
                 IAxisValueFormatter formatter = new IAxisValueFormatter() {
                     @Override
@@ -137,8 +144,9 @@ public class WebWalletChart extends AppCompatActivity {
 
                 LineData lineData = new LineData(dataSet);
 
-                XAxis xAxis = lineChart.getXAxis();
-                xAxis.setValueFormatter(formatter);
+//                XAxis xAxis = lineChart.getXAxis();
+//                xAxis.setValueFormatter(formatter);
+
 
                 lineChart.setData(lineData);
                 lineChart.invalidate(); // refresh

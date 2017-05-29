@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
-
     </com.github.mikephil.charting.charts.LineChart>
+
+
+
 
 </LinearLayout>
