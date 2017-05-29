@@ -1,6 +1,8 @@
 # KryptoParser
 This is KryptoParser's application website.
 
+Application created as an assignment of 'Mobile Systems Programming' subject on University of Economics in Cracow
+
 Goal of the application is to facilitate getting data about cryptocurrencies.
 <br>
 <h1><b>Functionality:</b></h1>
@@ -41,3 +43,20 @@ Goal of the application is to facilitate getting data about cryptocurrencies.
     <br>
     -User can change activity by clicking on menu icon located in action bar
     
+    <h1><b>Documentation</b></h1>
+    <b>Used api:</b>
+    <br>
+    - https://www.cryptonator.com/api
+    <br>
+    - https://poloniex.com/api
+    <br>
+    - https://api.coinmarketcap.com
+    <br>
+    - https://blockchain.info
+    
+    
+    
+    
+    Authors:
+-Marcin Gajda
+-Michał Gajda
