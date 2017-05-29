@@ -170,6 +170,10 @@ public class Wallet extends AppCompatActivity {
     protected void loadOldAdresses (View view) {
         EditText editText = (EditText) findViewById(R.id.oldAdresses);
         String loadedFile = loadFile(WALLET_FILE_NAME);
+
+        if (loadedFile.isEmpty())
+            loadedFile = "";
+
         editText.setText(loadedFile);
     }
     private class ReadURLTask extends AsyncTask<String, Void, String> {

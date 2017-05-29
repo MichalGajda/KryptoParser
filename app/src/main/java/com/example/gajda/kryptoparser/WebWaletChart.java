@@ -35,11 +35,9 @@ public class WebWaletChart extends AppCompatActivity {
     private final static String formatJson = "https://api.blockchain.info/charts/balance?address=<ADDRESS_HOLDER>&format=json";
     private final static String ADDRESS_HOLDER = "<ADDRESS_HOLDER>";
 
+    private ArrayList<String> xAxes = new ArrayList<>();
     private ArrayList<Entry> xValues = new ArrayList<>();
     private ArrayList<Entry> yValues = new ArrayList<>();
-
-    private String[] xAxis;
-    private String[] yAxis;
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -93,13 +91,11 @@ public class WebWaletChart extends AppCompatActivity {
 
                 int numberOfPoints = valuesArray.length();
 
-                xAxis = new String[numberOfPoints];
-                yAxis = new String[numberOfPoints];
-
                 for(int i = 0; i < numberOfPoints; i++){
 
                     JSONObject currencyObject = valuesArray.getJSONObject(i);
 
+                    //TODO
                     float xValue =  Float.parseFloat(currencyObject.getString(KEY_X));
                     xValues.add(new Entry(xValue, i));
                     float yValue =  Float.parseFloat(currencyObject.getString(KEY_Y));
