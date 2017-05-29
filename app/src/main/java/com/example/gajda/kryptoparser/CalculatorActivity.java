@@ -2,11 +2,15 @@ package com.example.gajda.kryptoparser;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -48,6 +52,32 @@ public class CalculatorActivity extends AppCompatActivity {
 
         new GetData().execute();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater =  getMenuInflater();
+        menuInflater.inflate(R.menu.menu_c, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.wallet:
+                Toast.makeText(this, "Wallet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, Wallet.class);
+                startActivity(intent);
+                //calculator();
+                return true;
+            case R.id.about:
+                Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(this, AboutAuthors.class);
+                startActivity(intent1);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class GetData extends AsyncTask<Void, Void, Void>{

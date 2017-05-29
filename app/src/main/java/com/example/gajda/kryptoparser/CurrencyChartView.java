@@ -167,7 +167,6 @@ public class CurrencyChartView extends AppCompatActivity {
             final String[] etykiety = new String[timeStamp.length];
             for(int i = 0; i < timeStamp.length; i++){
                 etykiety[i] = dateConverter(timeStamp[i]);
-                Log.d("Etykieta numer: " + i, etykiety[i]);
             }
 
             IAxisValueFormatter formatter = new IAxisValueFormatter() {

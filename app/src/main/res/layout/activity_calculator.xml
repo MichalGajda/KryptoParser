@@ -51,13 +51,13 @@
         <ListView
             android:id="@+id/currency_list"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:layout_weight="1" />
 
         <ListView
             android:id="@+id/currency_list2"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -80,6 +80,9 @@
     <TextView
         android:id="@+id/tv_finalURL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold" />
 
 </LinearLayout>

@@ -6,11 +6,9 @@
         android:id="@+id/calculator"
         android:icon="@drawable/calculator_icon32"
         android:title="@string/calculator"
-        app:showAsAction="ifRoom"
-        android:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/wallet"
         android:icon="@drawable/wallet_icon_nc"
         android:title="@string/wallet"
-        android:showAsAction="ifRoom"
         app:showAsAction="ifRoom"/>
 </menu>

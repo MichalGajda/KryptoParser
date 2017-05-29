@@ -17,7 +17,7 @@ public class ChangingListLimit extends AppCompatActivity {
         setContentView(R.layout.activity_changing_list_limit);
     }
 
-    protected void setNewLimit (View view) {
+    public void setNewLimit (View view) {
         int newLimit;
         EditText etNewLimit = (EditText) findViewById(R.id.new_limit);
         try {
@@ -34,7 +34,7 @@ public class ChangingListLimit extends AppCompatActivity {
             Toast.makeText(ChangingListLimit.this, "wrong value detected in text field\nonly Integers are accepted here", Toast.LENGTH_LONG).show();
         }
     }
-    protected void cancelLimitChange (View view) {
+    public void cancelLimitChange (View view) {
         switchToMain();
     }
     private void switchToMain () {

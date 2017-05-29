@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/calculator"
-        android:icon="@drawable/calculator_icon32"
-        android:title="@string/calculator"
+        android:id="@+id/wallet"
+        android:icon="@drawable/wallet_icon_nc"
+        android:title="@string/wallet"
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/about"
         android:title="@string/about"

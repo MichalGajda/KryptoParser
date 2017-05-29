@@ -97,7 +97,7 @@ public class Wallet extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    protected void checkOtherAdress (View view) {
+    public void checkOtherAdress (View view) {
         setContentView(R.layout.activity_wallet);
     }
 
@@ -113,10 +113,10 @@ public class Wallet extends AppCompatActivity {
             Toast.makeText(this, "address field can't be empty", Toast.LENGTH_SHORT).show();
         }
     }
-    protected void saveCurrentAddress (View view) {
+    public void saveCurrentAddress (View view) {
         saveToFile(address_input, WALLET_FILE_NAME);
     }
-    protected void reset (View view) {
+    public void reset (View view) {
         Log.d(MainActivity.PSM_Project_log, "reset");
         try {
             FileOutputStream fileOutputStream = openFileOutput(WALLET_FILE_NAME, Context.MODE_PRIVATE);
@@ -167,7 +167,7 @@ public class Wallet extends AppCompatActivity {
         }
         return stringBuilder.toString();
     }
-    protected void loadOldAdresses (View view) {
+    public void loadOldAdresses (View view) {
         EditText editText = (EditText) findViewById(R.id.oldAdresses);
         String loadedFile = loadFile(WALLET_FILE_NAME);
         editText.setText(loadedFile);
@@ -275,7 +275,7 @@ public class Wallet extends AppCompatActivity {
         return Double.parseDouble(satoshis) / Math.pow(10,8);
     }
 
-    protected void showHistoryAsChart(View view) {
+    public void showHistoryAsChart(View view) {
             Intent intent = new Intent(this, WebWaletChart.class);
             intent.putExtra(URL_CHART, address_input);
             startActivity(intent);
