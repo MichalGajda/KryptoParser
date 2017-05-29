@@ -29,13 +29,14 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="calculate">Calculate</string>
-    <string name="total_received_btc">Total recived:</string>
+    <string name="total_received_btc">Total received:</string>
     <string name="total_sent_btc">Total sent:</string>
     <string name="final_balance_btc">Final balance:</string>
     <string name="number_of_transactions">Number of transactions:</string>
     <string name="address">Address:</string>
     <string name="addres_warning">Check if you typed correct address and try again</string>
     <string name="no_exchange_data_info">Sorry, no data about this pair</string>
+    <string name="calc_quantity">From quantity</string>
 
     <string-array name="real_currencies">
         <item>pln</item>

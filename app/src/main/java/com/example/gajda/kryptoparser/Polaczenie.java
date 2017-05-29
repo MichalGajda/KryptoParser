@@ -1,7 +1,5 @@
 package com.example.gajda.kryptoparser;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,10 +32,7 @@ class Polaczenie {
                 connection.setRequestMethod("GET");
             }
 
-
             int responseCode = connection.getResponseCode();
-
-            Log.d("Tak ", Integer.toString(responseCode));
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 String message;

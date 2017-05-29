@@ -62,6 +62,14 @@
 
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/et_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/calc_quantity"
+        android:inputType="number" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"

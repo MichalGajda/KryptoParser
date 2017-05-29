@@ -16,12 +16,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
 }
 
-repositories {
-    maven { url "https://jitpack.io" }
-}
 allprojects {
     repositories {
         maven { url "https://jitpack.io" }

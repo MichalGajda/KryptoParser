@@ -6,19 +6,27 @@
     tools:context="com.example.gajda.kryptoparser.MainActivity"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/change_list_limit"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="changeListLimit"
-        android:text="change list limit" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/refreshList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="refresh"
-        android:text="refresh" />
+        <Button
+            android:id="@+id/change_list_limit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="changeListLimit"
+            android:text="change list limit" />
+
+        <Button
+            android:id="@+id/refreshList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="refresh"
+            android:text="refresh" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@android:id/list"
