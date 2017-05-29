@@ -28,7 +28,7 @@
     <string name="waitMessage">Please wait</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="calculate">Calculate</string>
+    <string name="get_exchange_rate">Get exchange rate</string>
     <string name="total_received_btc">Total received:</string>
     <string name="total_sent_btc">Total sent:</string>
     <string name="final_balance_btc">Final balance:</string>
@@ -37,6 +37,9 @@
     <string name="addres_warning">Check if you typed correct address and try again</string>
     <string name="no_exchange_data_info">Sorry, no data about this pair</string>
     <string name="calc_quantity">quantity</string>
+    <string name="exchange_rate">Exchange rate</string>
+    <string name="calculate">Calculate</string>
+    <string name="result">result</string>
 
     <string-array name="real_currencies">
         <item>pln</item>

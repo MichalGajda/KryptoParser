@@ -86,7 +86,6 @@ public class Wallet extends AppCompatActivity {
                 Toast.makeText(this, "Calculator", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, CalculatorActivity.class);
                 startActivity(intent);
-                //calculator();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About creator", Toast.LENGTH_SHORT).show();
