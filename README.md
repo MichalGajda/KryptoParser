@@ -43,7 +43,7 @@ Goal of the application is to facilitate getting data about cryptocurrencies.
     <br>
     -User can change activity by clicking on menu icon located in action bar
     <br>
-    <b><h1>Documentation</h1></b>
+    <h1><b>Documentation</b></h1>
     Used api:
     <br>
     -https://www.cryptonator.com/api
